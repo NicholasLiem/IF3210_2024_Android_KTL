@@ -15,4 +15,12 @@ class ApiClientTest {
         val responseBody = response.body()
         assert(responseBody != null)
     }
+
+    @Test
+    fun `test token expiration`() {
+        val apiClient = ApiClient
+
+        val response = apiClient.apiService.checkTokenExpiration("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaW0iOiIxMzUyMTEzNSIsImlhdCI6MTcwOTkxNzE1MywiZXhwIjoxNzA5OTE3NDUzfQ.7djMiHeQ_YjbMGHKsuGfX8io6OdGBLqj6dE-97eo0-I").execute()
+        assertEquals(401, response.code())
+    }
 }
