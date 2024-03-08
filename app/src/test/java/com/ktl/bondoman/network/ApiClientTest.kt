@@ -20,7 +20,7 @@ class ApiClientTest {
     fun `test token expiration`() {
         val apiClient = ApiClient
 
-        val response = apiClient.apiService.checkTokenExpiration("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaW0iOiIxMzUyMTEzNSIsImlhdCI6MTcwOTkxNzE1MywiZXhwIjoxNzA5OTE3NDUzfQ.7djMiHeQ_YjbMGHKsuGfX8io6OdGBLqj6dE-97eo0-I").execute()
+        val response = apiClient.apiService.checkTokenExpiration("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaW0iOiIxMzUyMTEzNSIsImlhdCI6MTcwOTkxNzYwOSwiZXhwIjoxNzA5OTE3OTA5fQ.VrURIcGhI6PyEMwa0Q3RuDv39epgVo5kP01Gc4-VfUM").execute()
         assertEquals(401, response.code())
     }
 }
