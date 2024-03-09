@@ -1,6 +1,5 @@
 package com.ktl.bondoman.ui.auth
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,7 +15,6 @@ import com.ktl.bondoman.network.requests.LoginRequest
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
-    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
