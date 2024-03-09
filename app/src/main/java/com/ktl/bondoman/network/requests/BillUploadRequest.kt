@@ -6,7 +6,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 data class BillUploadRequest(
-    val token: String,
     val filePath: String
 ) {
     fun toMultipartBodyPart(): MultipartBody.Part {
