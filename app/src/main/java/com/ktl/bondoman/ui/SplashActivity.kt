@@ -9,6 +9,7 @@ import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.R
 
 @SuppressLint("CustomSplashScreen")
+@Suppress("DEPRECATION")
 class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
