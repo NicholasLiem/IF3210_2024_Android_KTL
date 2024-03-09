@@ -1,4 +1,4 @@
-package com.ktl.bondoman.network.models
+package com.ktl.bondoman.network.reponses
 
 import com.google.gson.annotations.SerializedName
 

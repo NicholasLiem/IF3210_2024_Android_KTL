@@ -1,7 +1,7 @@
 package com.ktl.bondoman.network
 
-import com.ktl.bondoman.network.models.CheckTokenExpirationResponse
-import com.ktl.bondoman.network.models.LoginResponse
+import com.ktl.bondoman.network.reponses.CheckTokenExpirationResponse
+import com.ktl.bondoman.network.reponses.LoginResponse
 import com.ktl.bondoman.network.requests.LoginRequest
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
