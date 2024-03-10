@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.ktl.bondoman.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -56,5 +57,11 @@ class ScanFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val activity = activity as AppCompatActivity
+        activity.supportActionBar?.title = "Scan"
     }
 }

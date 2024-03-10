@@ -11,5 +11,6 @@
     <color name="silver_gray">#C0C0C0</color>
     <color name="gainsboro">#DCDCDC</color>
     <color name="white_smoke">#F5F5F5</color>
+    <color name="header_background">#FF03DAC5</color>
     <color name="white">#FFFFFF</color>
 </resources>
