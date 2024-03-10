@@ -23,7 +23,6 @@
 
         <activity android:name=".MainActivity"/>
         <activity android:name=".ui.auth.LoginActivity"/>
-        <!-- Delete this activity if not used -->
     </application>
 
 </manifest>
