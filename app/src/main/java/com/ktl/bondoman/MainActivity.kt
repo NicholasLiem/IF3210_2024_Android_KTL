@@ -23,11 +23,6 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        // Debugging purpose only
-        val editor = sharedPreferences.edit()
-        editor.remove("token")
-        editor.apply()
-
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)

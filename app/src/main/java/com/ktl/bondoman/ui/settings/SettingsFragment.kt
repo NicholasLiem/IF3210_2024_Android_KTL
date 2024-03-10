@@ -1,11 +1,15 @@
 package com.ktl.bondoman.ui.settings
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -63,5 +67,19 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = "Settings"
+
+        val logOutButton: Button = view.findViewById(R.id.log_out_button)
+
+        logOutButton.setOnClickListener {
+            val sharedPreferences = activity.getSharedPreferences("appPreferences", Context.MODE_PRIVATE)
+            sharedPreferences?.edit()?.apply() {
+                remove("token")
+                apply()
+            }
+
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
     }
 }
