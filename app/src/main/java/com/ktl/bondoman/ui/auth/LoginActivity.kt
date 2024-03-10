@@ -42,9 +42,9 @@ class LoginActivity : AppCompatActivity() {
                         apply()
                     }
 
-                    val mainActivityIntent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(mainActivityIntent)
-                    finish()
+                    val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
+                    mainIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(mainIntent)
 
                     runOnUiThread {
                         Toast.makeText(this@LoginActivity, "Login successful", Toast.LENGTH_SHORT).show()
