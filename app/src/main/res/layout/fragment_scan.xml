@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.scan.ScanFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.camera.view.PreviewView
+        android:id="@+id/cameraView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Scan Fragment" />
+        android:layout_gravity="center"/>
 
-</FrameLayout>
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="40dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/camera_click"
+            app:tint="@color/bondo_white" />
+
+
+        <ImageButton
+            android:id="@+id/switchCamButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/cameraButton"
+            android:layout_marginBottom="40dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/camera_switch"
+            app:tint="@color/bondo_white" />
+
+
+
+
+
+</RelativeLayout>
