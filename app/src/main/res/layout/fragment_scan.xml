@@ -15,8 +15,8 @@
 
         <ImageButton
             android:id="@+id/cameraButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="40dp"
@@ -27,10 +27,11 @@
 
         <ImageButton
             android:id="@+id/switchCamButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/cameraButton"
+            android:layout_marginLeft="30dp"
             android:layout_marginBottom="40dp"
             android:background="@android:color/transparent"
             android:src="@drawable/camera_switch"

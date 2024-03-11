@@ -61,6 +61,7 @@ class ScanFragment : Fragment() {
                 REQUIRED_PERMISSIONS, REQUEST_CODE
             )
         } else {
+            startCamera()
             Toast.makeText(requireActivity(), "Camera Permission Granted", Toast.LENGTH_SHORT)
                 .show()
         }
