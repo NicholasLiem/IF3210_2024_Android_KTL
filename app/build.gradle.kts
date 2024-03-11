@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -59,4 +60,8 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.1.0-alpha03")
     implementation("androidx.camera:camera-lifecycle:1.1.0-alpha03")
     implementation("androidx.camera:camera-view:1.0.0-alpha23")
+
+    implementation("androidx.room:room-ktx:2.4.3")
+    annotationProcessor("androidx.room:room-compiler:2.4.3")
+    kapt("androidx.room:room-compiler:2.4.3")
 }
