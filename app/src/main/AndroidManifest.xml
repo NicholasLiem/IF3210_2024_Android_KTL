@@ -7,9 +7,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/bondoman_icon"
+        android:icon="@mipmap/bondo_man"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/bondoman_icon_round"
+        android:roundIcon="@mipmap/bondo_man_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BondoMan">
         <activity
