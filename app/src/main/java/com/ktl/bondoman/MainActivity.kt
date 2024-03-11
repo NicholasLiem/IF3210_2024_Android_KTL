@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
+
     private fun isTokenExpired(token: String): Boolean {
     // TODO: Implement this
         return false
