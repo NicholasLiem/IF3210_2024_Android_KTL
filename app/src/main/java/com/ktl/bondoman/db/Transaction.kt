@@ -4,8 +4,12 @@ import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
-@Entity(tableName = "transaction")
+@Entity(tableName = "_transactions")
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -28,4 +32,15 @@ data class Transaction(
 
     @ColumnInfo(name = "date")
     val date: Long = System.currentTimeMillis()
-)
+) {
+    companion object {
+        @JvmStatic
+        @TypeConverter
+        fun getDateString(millis: Long): String {
+            val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = millis
+            return formatter.format(calendar.time)
+        }
+    }
+}
