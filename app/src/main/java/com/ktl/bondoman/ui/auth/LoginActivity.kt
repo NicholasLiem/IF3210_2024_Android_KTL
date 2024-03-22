@@ -12,12 +12,16 @@ import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.R
 import com.ktl.bondoman.network.ApiClient
 import com.ktl.bondoman.network.requests.LoginRequest
+import com.ktl.bondoman.token.TokenManager
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var tokenManager: TokenManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        tokenManager = TokenManager(this)
 
         val emailEditText = findViewById<EditText>(R.id.login_email_field)
         val passwordEditText = findViewById<EditText>(R.id.login_password_field)
@@ -37,9 +41,8 @@ class LoginActivity : AppCompatActivity() {
                 val response = ApiClient.apiService.login(LoginRequest(email, password))
                 if (response.isSuccessful && response.body() != null) {
                     val token = response.body()?.token
-                    getSharedPreferences("appPreferences", Context.MODE_PRIVATE).edit().apply {
-                        putString("token", token)
-                        apply()
+                    token?.let {
+                        tokenManager.saveTokenRaw(it)
                     }
 
                     val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)

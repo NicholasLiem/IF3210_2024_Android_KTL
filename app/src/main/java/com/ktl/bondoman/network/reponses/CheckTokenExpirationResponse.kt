@@ -7,8 +7,8 @@ data class CheckTokenExpirationResponse(
     val nim: String,
 
     @SerializedName("iat")
-    val iat: Int,
+    val iat: Long,
 
     @SerializedName("exp")
-    val exp: Int
+    val exp: Long
 )
