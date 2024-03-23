@@ -1,7 +1,6 @@
 package com.ktl.bondoman.ui.transaction
 
 import android.os.Bundle
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +9,11 @@ import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.ktl.bondoman.R
 import com.ktl.bondoman.TransactionApplication
 import com.ktl.bondoman.db.Transaction
 import android.widget.Toast
-import androidx.core.view.KeyEventDispatcher.dispatchKeyEvent
+import com.ktl.bondoman.token.TokenManager
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,6 +32,7 @@ private const val ARG_ID = "id"
  */
 class TransactionAddFragment : Fragment() {
 
+    private lateinit var tokenManager: TokenManager
     private val transactionViewModel: TransactionViewModel by viewModels {
         TransactionViewModelFactory((requireActivity().application as TransactionApplication).repository)
     }
@@ -48,15 +47,10 @@ class TransactionAddFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            // Parse arguments
-            nim = it.getString(ARG_PARAM1)
-            title = it.getString(ARG_PARAM2)
-            category = it.getString(ARG_PARAM3)
-            amount = it.getString(ARG_PARAM4)
-            location = it.getString(ARG_PARAM5)
-            id = it.getLong(ARG_ID)
-        }
+        tokenManager = TokenManager(requireContext())
+        nim = tokenManager.loadToken()?.nim
+        // Maybe add validation if nim is not there
+        parseArguments()
     }
 
 
@@ -76,10 +70,10 @@ class TransactionAddFragment : Fragment() {
         val categoryRadioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
 
 
-        nimEditText.setText(nim)
-        titleEditText.setText(title)
-        amountEditText.setText(amount)
-        locationEditText.setText(location)
+        nimEditText.text = nim
+        titleEditText.text = title
+        amountEditText.text = amount
+        locationEditText.text = location
 
         // set category
         fun setCategory(category: String?) {
@@ -100,42 +94,37 @@ class TransactionAddFragment : Fragment() {
             val title = titleEditText.text.toString()
             val amount = amountEditText.text.toString().toDoubleOrNull() ?: 0.0
             val location = locationEditText.text.toString()
-            val checkedRadioButtonId = categoryRadioGroup.checkedRadioButtonId
-            val category = when (checkedRadioButtonId) {
+            val category = when (categoryRadioGroup.checkedRadioButtonId) {
                 R.id.radioButtonIncome -> "Pemasukan"
                 R.id.radioButtonExpense -> "Pengeluaran"
                 else -> "" // Handle default case
             }
 
+            if (validateForm(title, amount, location, category)) {
+                // Insert data into database
+                transactionViewModel.insert(
+                    Transaction(id, nim, title, category, amount, location))
 
-            // Insert data into database
-            transactionViewModel.insert(
-                Transaction(id, nim, title, category, amount, location))
+                val currentActivity = requireActivity()
 
-            val currentActivity = requireActivity()
+                currentActivity.runOnUiThread {
+                    // Display toast
+                    Toast.makeText(
+                        currentActivity,
+                        "Transaction added successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
-            currentActivity.runOnUiThread(Runnable {
-                // Display toast
-                Toast.makeText(currentActivity, "Transaction added successfully", Toast.LENGTH_SHORT).show()
-            })
-
-            // Begin a fragment transaction
-            getActivity()?.getSupportFragmentManager()?.popBackStackImmediate();
+                // Begin a fragment transaction
+                activity?.supportFragmentManager?.popBackStackImmediate()
+            }
         }
         return view
     }
 
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TransactionAddFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(nim: String, title: String, category: String, amount: String, location: String) =
             TransactionAddFragment().apply {
@@ -158,5 +147,39 @@ class TransactionAddFragment : Fragment() {
                     putString(ARG_PARAM5, transaction.location)
                 }
             }
+    }
+
+    private fun parseArguments() {
+        arguments?.let {
+            title = it.getString(ARG_PARAM2)
+            category = it.getString(ARG_PARAM3)
+            amount = it.getString(ARG_PARAM4)
+            location = it.getString(ARG_PARAM5)
+            id = it.getLong(ARG_ID, 0)
+        }
+    }
+
+    private fun validateForm(title: String, amount: Double, location: String, category: String): Boolean {
+        if (title.isEmpty()) {
+            Toast.makeText(requireContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (amount <= 0.0) {
+            Toast.makeText(requireContext(), "Amount must be greater than 0", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (location.isEmpty()) {
+            Toast.makeText(requireContext(), "Location cannot be empty", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (category.isEmpty()) {
+            Toast.makeText(requireContext(), "Please select a category", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
     }
 }

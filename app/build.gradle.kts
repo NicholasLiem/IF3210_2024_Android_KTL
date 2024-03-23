@@ -56,6 +56,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("androidx.test:core-ktx:1.5.0")
     implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation("androidx.security:security-crypto:1.0.0")
     testImplementation("org.robolectric:robolectric:4.5.1")
     testImplementation("org.mockito:mockito-core:3.3.3")
     testImplementation("junit:junit:4.13.2")
