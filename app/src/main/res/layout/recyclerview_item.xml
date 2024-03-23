@@ -21,6 +21,11 @@
             android:background="@android:color/holo_orange_light" />
 
         <TextView
+            android:id="@+id/nimView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp" />
+        <TextView
             android:id="@+id/dateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,11 +42,6 @@
             android:padding="4dp" />
         <TextView
             android:id="@+id/categoryView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp" />
-        <TextView
-            android:id="@+id/nimView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp" />
