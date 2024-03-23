@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun scheduleTokenExpiryCheck() {
         val workRequest = OneTimeWorkRequestBuilder<TokenExpiryWorker>()
-            .setInitialDelay(2, TimeUnit.MINUTES)
+            .setInitialDelay(30, TimeUnit.SECONDS)
             .build()
 
         WorkManager.getInstance(this)

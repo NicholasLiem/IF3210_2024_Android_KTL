@@ -19,11 +19,11 @@ class TokenExpiryWorker(
         val tokenManager = TokenManager(applicationContext)
         val token = tokenManager.loadToken()
 
+        Log.i("TokenExpiryWorker", "Running work")
         token?.exp?.let { exp ->
 
             val expMillis = exp * 1000
-
-            if (System.currentTimeMillis() > expMillis - 4 * 1000 * 60) {
+            if (System.currentTimeMillis() > expMillis) {
                 tokenManager.clearToken()
 
                 val sharedPreferences = applicationContext.getSharedPreferences("appPreferences", Context.MODE_PRIVATE)
@@ -40,7 +40,7 @@ class TokenExpiryWorker(
 
     private fun rescheduleWork() {
         val workRequest = OneTimeWorkRequestBuilder<TokenExpiryWorker>()
-            .setInitialDelay(2, TimeUnit.MINUTES)
+            .setInitialDelay(30, TimeUnit.SECONDS)
             .build()
 
         WorkManager.getInstance(applicationContext).enqueueUniqueWork(
