@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,15 +15,17 @@
             android:id="@+id/textInputLayoutNim"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="NIM">
+            android:hint="NIM"
+            style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextNim"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:enabled="false"
                 android:inputType="text"
-                android:maxLines="1"
-                android:enabled="false" />
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Title -->
@@ -30,7 +33,8 @@
             android:id="@+id/textInputLayoutTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title">
+            android:hint="Beli AyamAyaman Paket A"
+            style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTitle"
@@ -65,7 +69,8 @@
             android:id="@+id/textInputLayoutAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Amount">
+            android:hint="30000"
+            style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextAmount"
@@ -80,15 +85,16 @@
             android:id="@+id/textInputLayoutLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Location">
+            android:hint="Location"
+            style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:inputType="text"
-                android:maxLines="1"
-                android:enabled="false"/>
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Submit Button -->
