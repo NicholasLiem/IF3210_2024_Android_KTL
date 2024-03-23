@@ -1,34 +1,23 @@
 package com.ktl.bondoman.ui.transaction
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.ktl.bondoman.R
-import com.ktl.bondoman.TransactionApplication
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.ktl.bondoman.db.Transaction
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import com.ktl.bondoman.token.TokenManager
+import com.ktl.bondoman.R
+import com.ktl.bondoman.TransactionApplication
+
 
 class TransactionListFragment : Fragment() {
-    private lateinit var tokenManager: TokenManager
     private val transactionViewModel: TransactionViewModel by viewModels {
         TransactionViewModelFactory((requireActivity().application as TransactionApplication).repository)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        tokenManager = TokenManager(requireContext())
     }
 
     override fun onCreateView(
@@ -57,21 +46,16 @@ class TransactionListFragment : Fragment() {
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
             // Create a new instance of the fragment
-            val newWordFragment = tokenManager.loadToken()?.nim?.let { nim ->
-                TransactionAddFragment.newInstance(
-                    nim, "", "", "", "")
-            }
+            val newWordFragment = TransactionAddFragment.newInstance("", "", "", "", "")
 
             // Begin a fragment transaction
-            if (newWordFragment != null) {
-                getActivity()?.supportFragmentManager?.beginTransaction()
-                    // Replace the content of the container with the new fragment
-                    ?.replace(R.id.nav_host_fragment, newWordFragment)
-                    // Add the transaction to the back stack (optional)
-                    ?.addToBackStack(null)
-                    // Commit the transaction
-                    ?.commit()
-            }
+            getActivity()?.supportFragmentManager?.beginTransaction()
+                // Replace the content of the container with the new fragment
+                ?.replace(R.id.nav_host_fragment, newWordFragment)
+                // Add the transaction to the back stack (optional)
+                ?.addToBackStack(null)
+                // Commit the transaction
+                ?.commit()
         }
         adapter.setOnDeleteClickListener { transaction ->
             // Handle delete button click
@@ -85,9 +69,8 @@ class TransactionListFragment : Fragment() {
             // Gausah legit "edit" operation di DB, tapi IDnya harus sama.
             // Soalnya kalau conflict di set UPDATE,jadi kek upsert gitu.
 
-
             // Begin a fragment transaction
-            getActivity()?.getSupportFragmentManager()?.beginTransaction()
+            getActivity()?.supportFragmentManager?.beginTransaction()
                 // Replace the content of the container with the new fragment
                 ?.replace(R.id.nav_host_fragment, newWordFragment)
                 // Add the transaction to the back stack (optional)

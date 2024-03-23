@@ -1,45 +1,28 @@
 package com.ktl.bondoman.ui.scan
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.LifecycleCameraController
-import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.PackageManagerCompat
-import androidx.navigation.ui.setupWithNavController
-import com.ktl.bondoman.R
-import com.ktl.bondoman.databinding.ActivityMainBinding
+import androidx.fragment.app.Fragment
 import com.ktl.bondoman.databinding.FragmentScanBinding
-import java.lang.reflect.Modifier
 
 private const val TAG = "cameraX"
 private const val FILE_NAME_FORMAT = "yy-MM-dd-HH-mm-ss-SSS"
 private const val REQUEST_CODE = 123
 private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
-
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ScanFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ScanFragment : Fragment() {
     private lateinit var viewBinding: FragmentScanBinding
     private var imageCapture : ImageCapture? = null

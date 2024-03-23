@@ -2,20 +2,20 @@ package com.ktl.bondoman.ui.transaction
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.ktl.bondoman.R
 import com.ktl.bondoman.TransactionApplication
 import com.ktl.bondoman.db.Transaction
-import android.widget.Toast
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.utils.LocationUtils
 import com.ktl.bondoman.utils.PermissionUtils

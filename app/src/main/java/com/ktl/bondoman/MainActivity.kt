@@ -14,10 +14,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ktl.bondoman.token.Token
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.auth.LoginActivity
-
+import com.ktl.bondoman.utils.PermissionUtils
 import com.ktl.bondoman.workers.TokenExpiryWorker
 import java.util.concurrent.TimeUnit
-import com.ktl.bondoman.utils.PermissionUtils
 
 class MainActivity : AppCompatActivity() {
 
