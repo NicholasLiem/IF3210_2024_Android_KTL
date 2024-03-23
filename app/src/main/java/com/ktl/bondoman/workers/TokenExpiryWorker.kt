@@ -26,7 +26,7 @@ class TokenExpiryWorker(
             if (System.currentTimeMillis() > expMillis) {
                 tokenManager.clearToken()
 
-                val sharedPreferences = applicationContext.getSharedPreferences("appPreferences", Context.MODE_PRIVATE)
+                val sharedPreferences = tokenManager.getSharedPreferences()
                 with(sharedPreferences.edit()) {
                     putBoolean("tokenExpired", true)
                     apply()

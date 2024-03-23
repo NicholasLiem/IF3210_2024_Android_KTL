@@ -43,8 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        getSharedPreferences("appPreferences", Context.MODE_PRIVATE)
-            .unregisterOnSharedPreferenceChangeListener(prefsListener)
+        tokenManager.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(prefsListener)
     }
 
     private fun scheduleTokenExpiryCheck() {
@@ -67,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
     private fun setupPrefsListener() {
-        val sharedPreferences = getSharedPreferences("appPreferences", Context.MODE_PRIVATE)
+        val sharedPreferences = tokenManager.getSharedPreferences()
         prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
             if (key == "tokenExpired" && prefs.getBoolean(key, false)) {
                 with(prefs.edit()) {

@@ -1,6 +1,7 @@
 package com.ktl.bondoman.token
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.google.gson.Gson
@@ -15,6 +16,10 @@ class TokenManager(context: Context) {
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
+
+    fun getSharedPreferences(): SharedPreferences {
+        return this.sharedPreferences
+    }
     fun saveTokenRaw(token: String) {
         with(sharedPreferences.edit()) {
             putString("token", token)
