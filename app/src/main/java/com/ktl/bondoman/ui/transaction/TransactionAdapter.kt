@@ -1,5 +1,6 @@
 package com.ktl.bondoman.ui.transaction
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,24 +38,25 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionViewHolder>(Trans
 }
 
 class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val wordItemView: TextView = itemView.findViewById(R.id.textView)
-    private val wordItemView2: TextView = itemView.findViewById(R.id.textView2)
-    private val wordItemView3: TextView = itemView.findViewById(R.id.textView3)
-    private val wordItemView4: TextView = itemView.findViewById(R.id.textView4)
-    private val wordItemView5: TextView = itemView.findViewById(R.id.textView5)
-    private val wordItemView6: TextView = itemView.findViewById(R.id.textView6)
+    private val titleView: TextView = itemView.findViewById(R.id.titleView)
+    private val dateView: TextView = itemView.findViewById(R.id.dateView)
+    private val amountView: TextView = itemView.findViewById(R.id.amountView)
+    private val locationView: TextView = itemView.findViewById(R.id.locationView)
+    private val categoryView: TextView = itemView.findViewById(R.id.categoryView)
+    private val nimView: TextView = itemView.findViewById(R.id.nimView)
 
     private val buttonEdit: ImageButton = itemView.findViewById(R.id.buttonEdit)
     private val buttonDelete: ImageButton = itemView.findViewById(R.id.buttonDelete)
 
 
+    @SuppressLint("SetTextI18n")
     fun bind(current: Transaction, editClickListener: ((Transaction) -> Unit)?, deleteClickListener: ((Transaction) -> Unit)?){
-        wordItemView.text = "Title: " + current.title
-        wordItemView2.text = "Date: " + Transaction.getDateString(current.date)
-        wordItemView3.text = "Amount: " + current.amount.toString()
-        wordItemView4.text = "Location: " + current.location
-        wordItemView5.text = "Category: " + current.category
-        wordItemView6.text = "NIM: " + current.nim
+        titleView.text = "Title: " + current.title
+        dateView.text = "Date: " + Transaction.getDateString(current.date)
+        amountView.text = "Amount: " + current.amount.toString()
+        locationView.text = "Location: " + current.location
+        categoryView.text = "Category: " + current.category
+        nimView.text = "NIM: " + current.nim
         buttonEdit.setOnClickListener {
             editClickListener?.invoke(current)
         }

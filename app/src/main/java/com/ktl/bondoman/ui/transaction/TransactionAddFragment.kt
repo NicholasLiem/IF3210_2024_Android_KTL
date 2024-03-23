@@ -67,7 +67,6 @@ class TransactionAddFragment : Fragment() {
         val submitButton = view.findViewById<Button>(R.id.buttonSubmit)
         val categoryRadioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
 
-
         nimEditText.text = nim
         titleEditText.text = title
         amountEditText.text = amount
