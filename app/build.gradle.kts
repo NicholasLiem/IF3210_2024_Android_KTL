@@ -57,6 +57,8 @@ dependencies {
     implementation("androidx.test:core-ktx:1.5.0")
     implementation("androidx.work:work-runtime-ktx:2.7.1")
     implementation("androidx.security:security-crypto:1.0.0")
+    implementation("com.google.android.gms:play-services-location:18.0.0")
+    implementation("androidx.cardview:cardview:1.0.0")
     testImplementation("org.robolectric:robolectric:4.5.1")
     testImplementation("org.mockito:mockito-core:3.3.3")
     testImplementation("junit:junit:4.13.2")

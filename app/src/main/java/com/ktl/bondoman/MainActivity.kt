@@ -1,6 +1,5 @@
 package com.ktl.bondoman
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -18,18 +17,19 @@ import com.ktl.bondoman.ui.auth.LoginActivity
 
 import com.ktl.bondoman.workers.TokenExpiryWorker
 import java.util.concurrent.TimeUnit
+import com.ktl.bondoman.utils.PermissionUtils
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tokenManager: TokenManager
     private lateinit var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         tokenManager = TokenManager(this)
 
+        PermissionUtils.requestLocationPermissions(this, PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE)
         setupPrefsListener()
         scheduleTokenExpiryCheck()
 
