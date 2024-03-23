@@ -53,7 +53,7 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     fun bind(current: Transaction, editClickListener: ((Transaction) -> Unit)?, deleteClickListener: ((Transaction) -> Unit)?){
         titleView.text = "Title: " + current.title
         dateView.text = "Date: " + Transaction.getDateString(current.date)
-        amountView.text = "Amount: " + current.amount.toString()
+        amountView.text = "Amount: Rp" + current.amount.toString()
         locationView.text = "Location: " + current.location
         categoryView.text = "Category: " + current.category
         nimView.text = "NIM: " + current.nim
