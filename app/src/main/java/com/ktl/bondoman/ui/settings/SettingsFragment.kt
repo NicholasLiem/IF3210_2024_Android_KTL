@@ -2,15 +2,28 @@ package com.ktl.bondoman.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.R
+import com.ktl.bondoman.TransactionApplication
 import com.ktl.bondoman.token.TokenManager
+import com.ktl.bondoman.ui.transaction.TransactionViewModel
+import com.ktl.bondoman.ui.transaction.TransactionViewModelFactory
+import com.ktl.bondoman.utils.ExporterUtils
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
     private lateinit var tokenManager: TokenManager
@@ -36,6 +49,10 @@ class SettingsFragment : Fragment() {
         activity.supportActionBar?.title = "Settings"
 
         val logOutButton: Button = view.findViewById(R.id.log_out_button)
+        val exportTransactionButton: Button = view.findViewById(R.id.export_transaction_button)
+        val emailTransactionButton: Button = view.findViewById(R.id.email_transaction_button)
+        val emailFormatRadioGroup: RadioGroup = view.findViewById(R.id.email_format_radio_group)
+
 
         logOutButton.setOnClickListener {
             val sharedPreferences = tokenManager.getSharedPreferences()
@@ -48,5 +65,54 @@ class SettingsFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+
+        exportTransactionButton.setOnClickListener {
+            // Handle export transaction button click
+            // Here you can perform actions for exporting transaction history
+            val fileType = getSelectedFileType(emailFormatRadioGroup)
+            // Do something with the selected file type
+            Log.w("SettingsFragment", "Exporting transactions")
+
+            val transactionDao = (requireActivity().application as TransactionApplication).database.transactionDao()
+            lifecycleScope.launch {
+                ExporterUtils.exportTransactions(requireContext(), transactionDao, fileType)
+            }
+            val currentActivity = requireActivity()
+            currentActivity.runOnUiThread {
+                // Display toast
+                Toast.makeText(
+                    currentActivity,
+                    "File exported successfully! See downloads folder",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+        emailTransactionButton.setOnClickListener {
+            // Handle email transaction button click
+            // Here you can perform actions for emailing transaction history
+            val fileType = getSelectedFileType(emailFormatRadioGroup)
+            // Do something with the selected file type
+
+            val transactionDao = (requireActivity().application as TransactionApplication).database.transactionDao()
+            lifecycleScope.launch {
+                ExporterUtils.exportTransactions(requireContext(), transactionDao, fileType, true)
+            }
+            val currentActivity = requireActivity()
+            currentActivity.runOnUiThread {
+                // Display toast
+                Toast.makeText(
+                    currentActivity,
+                    "Email intent redirected!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun getSelectedFileType(radioGroup: RadioGroup): String {
+        val selectedRadioButtonId = radioGroup.checkedRadioButtonId
+        val selectedRadioButton = view?.findViewById<RadioButton>(selectedRadioButtonId)
+        return selectedRadioButton?.tag.toString()
     }
 }

@@ -33,7 +33,7 @@
             android:id="@+id/textInputLayoutTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Beli AyamAyaman Paket A"
+            android:hint="Judul"
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -69,7 +69,7 @@
             android:id="@+id/textInputLayoutAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="30000"
+            android:hint="Nominal"
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText

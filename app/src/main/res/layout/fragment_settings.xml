@@ -17,6 +17,51 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+        <!-- Button for Export Transaction History -->
+        <Button
+            android:id="@+id/export_transaction_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export Transaction History"
+            app:cornerRadius="8dp"
+            android:layout_marginBottom="16dp"/>
+
+
+        <!-- Button for Email Transaction History -->
+        <Button
+            android:id="@+id/email_transaction_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email Transaction History"
+            app:cornerRadius="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- RadioGroup for Email Format -->
+        <RadioGroup
+            android:id="@+id/email_format_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <RadioButton
+                android:id="@+id/email_xlsx_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Export as XLSX"
+                android:tag="xlsx"
+                android:checked="true"
+                android:layout_marginEnd="8dp"/>
+
+            <RadioButton
+                android:id="@+id/email_xls_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="xls"
+                android:text="Export as XLS"
+                android:layout_marginStart="8dp"/>
+        </RadioGroup>
+
         <Button
             android:id="@+id/log_out_button"
             android:layout_width="match_parent"
