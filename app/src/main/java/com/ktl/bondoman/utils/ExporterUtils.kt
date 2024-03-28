@@ -91,6 +91,9 @@ private fun shareFileByEmail(context: Context, contentUri: Uri) {
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         emailIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         emailIntent.type = "application/vnd.ms-excel"
+
+        emailIntent.setPackage("com.google.android.gm")
+
         context.startActivity(emailIntent)
     } catch (e: Exception) {
         e.printStackTrace()

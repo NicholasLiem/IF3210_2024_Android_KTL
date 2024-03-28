@@ -103,7 +103,7 @@ class SettingsFragment : Fragment() {
                 // Display toast
                 Toast.makeText(
                     currentActivity,
-                    "Email intent redirected!",
+                    "Email generated",
                     Toast.LENGTH_LONG
                 ).show()
             }
