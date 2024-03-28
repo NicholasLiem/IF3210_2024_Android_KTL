@@ -76,4 +76,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
     implementation("com.google.android.material:material:1.4.0")
 
+    implementation("org.apache.poi:poi:5.2.4")
+    implementation("org.apache.poi:poi-ooxml:5.2.4")
+
+    implementation("org.apache.xmlbeans:xmlbeans:5.1.0")
+
 }
