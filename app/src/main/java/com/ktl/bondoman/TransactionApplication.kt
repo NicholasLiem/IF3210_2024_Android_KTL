@@ -5,6 +5,6 @@ import com.ktl.bondoman.db.TransactionDatabase
 import com.ktl.bondoman.db.TransactionRepository
 
 class TransactionApplication : Application() {
-        private val database by lazy { TransactionDatabase.getDatabase(this) }
+        val database by lazy { TransactionDatabase.getDatabase(this) }
         val repository by lazy { TransactionRepository(database.transactionDao()) }
 }
