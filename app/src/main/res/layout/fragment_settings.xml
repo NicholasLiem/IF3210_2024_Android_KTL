@@ -12,12 +12,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Button for Export Transaction History -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="160dp"
             android:layout_weight="1" />
-
-        <!-- Button for Export Transaction History -->
         <Button
             android:id="@+id/export_transaction_button"
             android:layout_width="match_parent"
@@ -28,6 +27,8 @@
 
 
         <!-- Button for Email Transaction History -->
+
+
         <Button
             android:id="@+id/email_transaction_button"
             android:layout_width="match_parent"
@@ -42,6 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:gravity="center_horizontal"
             >
 
             <RadioButton
@@ -62,6 +64,10 @@
                 android:layout_marginStart="8dp"/>
         </RadioGroup>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_weight="1" />
         <Button
             android:id="@+id/log_out_button"
             android:layout_width="match_parent"
@@ -70,6 +76,7 @@
             app:cornerRadius="8dp"
             android:layout_marginBottom="16dp"
         />
+
     </LinearLayout>
 
 </FrameLayout>

@@ -54,11 +54,25 @@
         android:orientation="vertical"
         android:visibility="gone"> <!-- Initially set to gone -->
 
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/memecat2" />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView3"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:srcCompat="@drawable/memecat2" />-->
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No internet connection"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textColor="@android:color/black"/>
 
         <!-- You can add additional views or styling here as needed -->
