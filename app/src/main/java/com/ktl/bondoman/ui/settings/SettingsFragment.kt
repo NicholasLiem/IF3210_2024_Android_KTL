@@ -67,10 +67,7 @@ class SettingsFragment : Fragment() {
         }
 
         exportTransactionButton.setOnClickListener {
-            // Handle export transaction button click
-            // Here you can perform actions for exporting transaction history
             val fileType = getSelectedFileType(emailFormatRadioGroup)
-            // Do something with the selected file type
             Log.w("SettingsFragment", "Exporting transactions")
 
             val transactionDao = (requireActivity().application as TransactionApplication).database.transactionDao()
@@ -89,10 +86,7 @@ class SettingsFragment : Fragment() {
         }
 
         emailTransactionButton.setOnClickListener {
-            // Handle email transaction button click
-            // Here you can perform actions for emailing transaction history
             val fileType = getSelectedFileType(emailFormatRadioGroup)
-            // Do something with the selected file type
 
             val transactionDao = (requireActivity().application as TransactionApplication).database.transactionDao()
             lifecycleScope.launch {

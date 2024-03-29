@@ -1,6 +1,10 @@
 package com.ktl.bondoman.ui.scan
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +20,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.databinding.FragmentScanBinding
 
 private const val TAG = "cameraX"
@@ -26,6 +31,8 @@ private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 class ScanFragment : Fragment() {
     private lateinit var viewBinding: FragmentScanBinding
     private var imageCapture : ImageCapture? = null
+    private lateinit var connectivityChangeReceiver: BroadcastReceiver
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -34,20 +41,24 @@ class ScanFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-
+    ): View {
         viewBinding = FragmentScanBinding.inflate(inflater, container, false)
-        if (!checkPermissions()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                REQUIRED_PERMISSIONS, REQUEST_CODE
-            )
+        connectivityChangeReceiver = ConnectivityChangeReceiver(this)
+        val networkReceiver = NetworkReceiver.getInstance()
+
+        if (!networkReceiver.isConnected()) {
+            viewBinding.noInternetLayout.visibility = View.VISIBLE
+            viewBinding.scanLayout.visibility = View.GONE
         } else {
-            startCamera()
-            Toast.makeText(requireActivity(), "Camera Permission Granted", Toast.LENGTH_SHORT)
-                .show()
+            viewBinding.noInternetLayout.visibility = View.GONE
+            viewBinding.scanLayout.visibility = View.VISIBLE
+            if (!checkPermissions()) {
+                requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE)
+            } else {
+                startCamera()
+            }
         }
+
         return viewBinding.root
     }
 
@@ -109,5 +120,39 @@ class ScanFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        requireContext().registerReceiver(
+            connectivityChangeReceiver,
+            IntentFilter(NetworkReceiver.ACTION_CONNECTIVITY_CHANGE)
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Unregister broadcast receiver
+        requireContext().unregisterReceiver(connectivityChangeReceiver)
+    }
+
+    class ConnectivityChangeReceiver(private val fragment: ScanFragment) : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val isConnected = intent?.getBooleanExtra(NetworkReceiver.EXTRA_CONNECTED, false) ?: false
+
+            // Access the view binding object directly to update UI
+            if (fragment.viewBinding.noInternetLayout.visibility == View.VISIBLE && isConnected) {
+                fragment.viewBinding.noInternetLayout.visibility = View.GONE
+                fragment.viewBinding.scanLayout.visibility = View.VISIBLE
+                if (!fragment.checkPermissions()) {
+                    fragment.requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE)
+                } else {
+                    fragment.startCamera()
+                }
+            } else if (fragment.viewBinding.noInternetLayout.visibility == View.GONE && !isConnected) {
+                fragment.viewBinding.noInternetLayout.visibility = View.VISIBLE
+                fragment.viewBinding.scanLayout.visibility = View.GONE
+            }
+        }
     }
 }

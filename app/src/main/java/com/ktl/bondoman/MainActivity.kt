@@ -1,8 +1,15 @@
 package com.ktl.bondoman
 
+import NetworkReceiver
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
@@ -18,10 +25,12 @@ import com.ktl.bondoman.utils.PermissionUtils
 import com.ktl.bondoman.workers.TokenExpiryWorker
 import java.util.concurrent.TimeUnit
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tokenManager: TokenManager
     private lateinit var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener
+    public lateinit var receiver: NetworkReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +47,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupUIComponents()
+
+        // Registers BroadcastReceiver to track network connection changes.
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        receiver = NetworkReceiver.getInstance()
+        this.registerReceiver(receiver, filter)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        this.unregisterReceiver(receiver)
         tokenManager.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(prefsListener)
     }
+
 
     private fun scheduleTokenExpiryCheck() {
         val workRequest = OneTimeWorkRequestBuilder<TokenExpiryWorker>()

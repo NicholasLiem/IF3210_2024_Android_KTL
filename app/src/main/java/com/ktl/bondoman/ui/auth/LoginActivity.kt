@@ -1,6 +1,9 @@
 package com.ktl.bondoman.ui.auth
 
+import NetworkReceiver
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -16,6 +19,8 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var tokenManager: TokenManager
+
+    private lateinit var receiver: NetworkReceiver
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -32,9 +37,17 @@ class LoginActivity : AppCompatActivity() {
 
             login(email, password)
         }
+
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        receiver = NetworkReceiver.getInstance()
+        this.registerReceiver(receiver, filter)
     }
 
     private fun login(email: String, password: String) {
+        if (!receiver.isConnected()) {
+            Toast.makeText(this, "No internet connection, cannot login!", Toast.LENGTH_SHORT).show()
+            return
+        }
         lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.login(LoginRequest(email, password))
@@ -63,4 +76,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        this.unregisterReceiver(receiver)
+    }
+
+
 }
