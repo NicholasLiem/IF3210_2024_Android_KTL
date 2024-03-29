@@ -24,7 +24,6 @@ interface TransactionDao {
     @Query("DELETE FROM _transactions")
     suspend fun deleteAll()
 
-    // getAll return List
     @Query("SELECT * FROM _transactions ORDER BY date DESC")
     suspend fun getAllList(): List<Transaction>
 

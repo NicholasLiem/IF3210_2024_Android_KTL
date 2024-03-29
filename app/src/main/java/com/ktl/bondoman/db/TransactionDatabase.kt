@@ -18,8 +18,6 @@ abstract class TransactionDatabase : RoomDatabase() {
         fun getDatabase(
             context: Context,
         ): TransactionDatabase {
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
             Log.w("TransactionDatabase", "getDatabase")
             return INSTANCE ?: synchronized(this) {
 
@@ -28,12 +26,9 @@ abstract class TransactionDatabase : RoomDatabase() {
                     TransactionDatabase::class.java,
                     "word_database"
                 )
-                    // Wipes and rebuilds instead of migrating if no Migration object.
-                    // Migration is not part of this codelab.
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
-                // return instance
                 instance
             }
         }

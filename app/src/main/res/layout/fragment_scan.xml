@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.scan.ScanFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.camera.view.PreviewView
-        android:id="@+id/cameraView"
+    <RelativeLayout
+        android:id="@+id/scanLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"/>
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        >
+
+        <!-- Include your camera view and buttons here -->
+        <androidx.camera.view.PreviewView
+            android:id="@+id/cameraView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"/>
 
         <ImageButton
             android:id="@+id/cameraButton"
@@ -23,7 +30,6 @@
             android:background="@android:color/transparent"
             android:src="@drawable/camera_click"
             app:tint="@color/bondo_white" />
-
 
         <ImageButton
             android:id="@+id/switchCamButton"
@@ -37,8 +43,72 @@
             android:src="@drawable/camera_switch"
             app:tint="@color/bondo_white" />
 
+    </RelativeLayout>
+
+    <!-- Layout for displaying the no internet connection message -->
+    <LinearLayout
+        android:id="@+id/noInternetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"> <!-- Initially set to gone -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No internet connection"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"/>
+
+        <!-- You can add additional views or styling here as needed -->
+    </LinearLayout>
+
+</FrameLayout>
+
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    tools:context=".ui.scan.ScanFragment">-->
+
+<!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
+<!--    <androidx.camera.view.PreviewView-->
+<!--        android:id="@+id/cameraView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="center"/>-->
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/cameraButton"-->
+<!--            android:layout_width="90dp"-->
+<!--            android:layout_height="90dp"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_marginBottom="40dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:src="@drawable/camera_click"-->
+<!--            app:tint="@color/bondo_white" />-->
+
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/switchCamButton"-->
+<!--            android:layout_width="90dp"-->
+<!--            android:layout_height="90dp"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_toRightOf="@id/cameraButton"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:layout_marginBottom="40dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:src="@drawable/camera_switch"-->
+<!--            app:tint="@color/bondo_white" />-->
 
 
 
 
-</RelativeLayout>
+
+<!--</RelativeLayout>-->
