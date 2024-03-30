@@ -78,8 +78,8 @@ class TransactionAddFragment : Fragment() {
         // set category
         fun setCategory(category: String?) {
             when (category) {
-                "Pemasukan" -> categoryRadioGroup.check(R.id.radioButtonIncome)
-                "Pengeluaran" -> categoryRadioGroup.check(R.id.radioButtonExpense)
+                "Income" -> categoryRadioGroup.check(R.id.radioButtonIncome)
+                "Expense" -> categoryRadioGroup.check(R.id.radioButtonExpense)
                 else -> categoryRadioGroup.clearCheck() // Clear selection if category is not recognized
             }
         }
@@ -94,8 +94,8 @@ class TransactionAddFragment : Fragment() {
             val amount = amountEditText.text.toString().toDoubleOrNull() ?: 0.0
             val location = locationEditText.text.toString()
             val category = when (categoryRadioGroup.checkedRadioButtonId) {
-                R.id.radioButtonIncome -> "Pemasukan"
-                R.id.radioButtonExpense -> "Pengeluaran"
+                R.id.radioButtonIncome -> "Income"
+                R.id.radioButtonExpense -> "Expense"
                 else -> "" // Handle default case
             }
 
@@ -121,7 +121,6 @@ class TransactionAddFragment : Fragment() {
         }
 
         cancelButton.setOnClickListener {
-            // Begin a fragment transaction
             activity?.supportFragmentManager?.popBackStackImmediate()
         }
         return view

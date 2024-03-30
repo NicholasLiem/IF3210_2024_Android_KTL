@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,8 +19,9 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.ktl.bondoman.databinding.FragmentTwibbonBinding
 import com.ktl.bondoman.R
+import com.ktl.bondoman.databinding.FragmentTwibbonBinding
+import com.ktl.bondoman.databinding.FragmentTwibbonValidationBinding
 
 
 private const val TAG = "cameraX"
@@ -114,30 +116,40 @@ class TwibbonFragment : Fragment() {
         var twibbon3 : ImageView= view.findViewById(R.id.twibbon3);
         var twibbon4 : ImageView= view.findViewById(R.id.twibbon4);
         var twibbon5 : ImageView= view.findViewById(R.id.twibbon5);
-        var overlay: ImageView = view.findViewById(R.id.overlay);
-        var twibbonIdx = 0;
+        var overlay: ImageView = view.findViewById(R.id.twibbonOverlay);
+        var captureButton : Button = view.findViewById<Button>(R.id.captureButton)
+        var currentTwibbon = "";
 
         // When button is clicked
         twibbon1.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon1)
-            twibbonIdx = 1;
+            currentTwibbon = "twibbon1";
         }
         twibbon2.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon2)
-            twibbonIdx = 2;
+            currentTwibbon = "twibbon2";
         }
         twibbon3.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon3)
-            twibbonIdx = 3;
+            currentTwibbon = "twibbon3";
         }
         twibbon4.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon4)
-            twibbonIdx = 4;
+            currentTwibbon = "twibbon4";
         }
         twibbon5.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon5)
-            twibbonIdx = 5;
+            currentTwibbon = "twibbon5";
         }
+
+        captureButton.setOnClickListener {
+            val validationFrag = TwibbonValidationFragment.newInstance();
+            getActivity()?.supportFragmentManager?.beginTransaction()
+                ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
+                ?.addToBackStack(null)
+                ?.commit()
+        }
+
     }
 
     override fun onDestroyView() {

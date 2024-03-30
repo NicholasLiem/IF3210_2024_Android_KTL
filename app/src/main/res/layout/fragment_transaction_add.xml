@@ -9,7 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_gravity="center"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Add New Transaction"
+            android:textAlignment="center"
+            android:textColor="@color/gunmetal_gray"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <!-- Nim -->
         <com.google.android.material.textfield.TextInputLayout
@@ -35,7 +47,7 @@
             android:id="@+id/textInputLayoutTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Judul"
+            android:hint="Title"
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -58,13 +70,15 @@
                 android:id="@+id/radioButtonIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pemasukan" />
+                android:layout_marginHorizontal="6dp"
+                android:text="Income" />
 
             <RadioButton
                 android:id="@+id/radioButtonExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pengeluaran" />
+                android:layout_marginHorizontal="6dp"
+                android:text="Expense" />
         </RadioGroup>
 
         <!-- Amount -->
@@ -72,7 +86,7 @@
             android:id="@+id/textInputLayoutAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nominal"
+            android:hint="Amount"
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText

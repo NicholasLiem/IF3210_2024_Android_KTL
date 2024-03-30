@@ -57,10 +57,12 @@ class TransactionListFragment : Fragment() {
                 // Commit the transaction
                 ?.commit()
         }
+
         adapter.setOnDeleteClickListener { transaction ->
             // Handle delete button click
             transactionViewModel.delete(transaction)
         }
+
         adapter.setOnEditClickListener { transaction ->
             // Handle delete button click
             val newWordFragment = TransactionAddFragment.newInstance(transaction)
