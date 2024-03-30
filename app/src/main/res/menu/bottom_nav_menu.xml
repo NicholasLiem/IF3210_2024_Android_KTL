@@ -17,8 +17,14 @@
         android:title="@string/title_scan" />
 
     <item
+        android:id="@+id/navigation_twibbon"
+        android:icon="@drawable/twibbon_icon"
+        android:title="Twibbon" />
+
+    <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/settings_icon"
         android:title="@string/title_settings" />
+
 
 </menu>

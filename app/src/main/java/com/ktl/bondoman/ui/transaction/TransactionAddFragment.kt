@@ -65,6 +65,7 @@ class TransactionAddFragment : Fragment() {
         val amountEditText = view.findViewById<TextView>(R.id.editTextAmount)
         val locationEditText = view.findViewById<TextView>(R.id.editTextLocation)
         val submitButton = view.findViewById<Button>(R.id.buttonSubmit)
+        val cancelButton = view.findViewById<Button>(R.id.buttonCancel)
         val categoryRadioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
 
         nimEditText.text = nim
@@ -117,6 +118,11 @@ class TransactionAddFragment : Fragment() {
                 // Begin a fragment transaction
                 activity?.supportFragmentManager?.popBackStackImmediate()
             }
+        }
+
+        cancelButton.setOnClickListener {
+            // Begin a fragment transaction
+            activity?.supportFragmentManager?.popBackStackImmediate()
         }
         return view
     }

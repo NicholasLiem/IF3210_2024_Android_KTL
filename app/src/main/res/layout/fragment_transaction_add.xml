@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gainsboro"
     >
 
     <LinearLayout
@@ -19,6 +20,7 @@
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/bondo_white"
                 android:id="@+id/editTextNim"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,6 +39,7 @@
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/bondo_white"
                 android:id="@+id/editTextTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,6 +76,7 @@
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/bondo_white"
                 android:id="@+id/editTextAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -89,6 +93,7 @@
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@color/bondo_white"
                 android:id="@+id/editTextLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,12 +102,31 @@
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <!-- Cancel Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/buttonCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:text="Cancel" />
+
+            <Button
+                android:id="@+id/buttonSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:text="Submit" />
+        </LinearLayout>
+
         <!-- Submit Button -->
-        <Button
-            android:id="@+id/buttonSubmit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Submit" />
     </LinearLayout>
 </ScrollView>

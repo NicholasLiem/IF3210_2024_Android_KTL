@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_scan">
+    app:startDestination="@id/navigation_transaction_list">
 
     <fragment
         android:id="@+id/navigation_graph"
@@ -25,4 +25,9 @@
         android:name="com.ktl.bondoman.ui.transaction.TransactionListFragment"
         android:label="fragment_transaction_list"
         tools:layout="@layout/fragment_transaction_list" />
+    <fragment
+        android:id="@+id/navigation_twibbon"
+        android:name="com.ktl.bondoman.ui.twibbon.TwibbonFragment"
+        android:label="twibbon_settings"
+        tools:layout="@layout/fragment_twibbon" />
 </navigation>
