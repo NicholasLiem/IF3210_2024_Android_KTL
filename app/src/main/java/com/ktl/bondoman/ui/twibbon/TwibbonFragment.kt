@@ -1,63 +1,147 @@
 package com.ktl.bondoman.ui.twibbon
 
+import NetworkReceiver
+import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.ktl.bondoman.databinding.FragmentTwibbonBinding
 import com.ktl.bondoman.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
+private const val TAG = "cameraX"
+private const val FILE_NAME_FORMAT = "yy-MM-dd-HH-mm-ss-SSS"
+private const val REQUEST_CODE = 123
+private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
 class TwibbonFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var viewBinding: FragmentTwibbonBinding
+    private var imageCapture : ImageCapture? = null
+    private lateinit var connectivityChangeReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_twibbon, container, false)
+    ): View {
+        viewBinding = FragmentTwibbonBinding.inflate(inflater, container, false)
+        val networkReceiver = NetworkReceiver.getInstance()
+
+        if (!checkPermissions()) {
+            requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE)
+        } else {
+            startCamera()
+        }
+
+        return viewBinding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TwibbonFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TwibbonFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
+    fun checkPermissions() : Boolean{
+        return ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CODE){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                startCamera()
+                Toast.makeText(requireContext(), "Camera Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Camera Permission Not Granted", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun startCamera(){
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+
+            // Set up the preview use case
+            val preview = Preview.Builder()
+                .build()
+                .also { preview ->
+                    preview.setSurfaceProvider(viewBinding.cameraView.surfaceProvider)
+                }
+
+            imageCapture = ImageCapture.Builder()
+                .build()
+
+            // Set up the camera selector to use the default front camera
+            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageCapture
+                )
+            } catch (e: Exception) {
+                Log.d(TAG,"Start Camera Fails: ", e)
+            }
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = "Twibbon"
+
+        var twibbon1 : ImageView= view.findViewById(R.id.twibbon1);
+        var twibbon2 : ImageView= view.findViewById(R.id.twibbon2);
+        var twibbon3 : ImageView= view.findViewById(R.id.twibbon3);
+        var twibbon4 : ImageView= view.findViewById(R.id.twibbon4);
+        var twibbon5 : ImageView= view.findViewById(R.id.twibbon5);
+        var overlay: ImageView = view.findViewById(R.id.overlay);
+        var twibbonIdx = 0;
+
+        // When button is clicked
+        twibbon1.setOnClickListener {
+            overlay.setImageResource(R.drawable.twibbon1)
+            twibbonIdx = 1;
+        }
+        twibbon2.setOnClickListener {
+            overlay.setImageResource(R.drawable.twibbon2)
+            twibbonIdx = 2;
+        }
+        twibbon3.setOnClickListener {
+            overlay.setImageResource(R.drawable.twibbon3)
+            twibbonIdx = 3;
+        }
+        twibbon4.setOnClickListener {
+            overlay.setImageResource(R.drawable.twibbon4)
+            twibbonIdx = 4;
+        }
+        twibbon5.setOnClickListener {
+            overlay.setImageResource(R.drawable.twibbon5)
+            twibbonIdx = 5;
+        }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
 }
