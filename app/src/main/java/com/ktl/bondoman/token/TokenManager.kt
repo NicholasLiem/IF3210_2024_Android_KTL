@@ -1,6 +1,7 @@
 package com.ktl.bondoman.token
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
@@ -8,6 +9,7 @@ import com.google.gson.Gson
 import java.util.Base64
 
 class TokenManager(context: Context) {
+    private val appContext = context.applicationContext
     private val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
     private val sharedPreferences = EncryptedSharedPreferences.create(
         "encryptedPreferences",
@@ -40,6 +42,16 @@ class TokenManager(context: Context) {
             null
         }
     }
+
+    fun setTokenExpired() {
+        val intent = Intent("com.ktl.bondoman.ACTION_TOKEN_EXPIRED")
+        appContext.sendBroadcast(intent)
+    }
+
+    fun getTokenStr(): String? {
+        return sharedPreferences.getString("token", null)
+    }
+
     private fun parseJwt(token: String): Token? {
         val parts = token.split(".")
         if (parts.size == 3) {
