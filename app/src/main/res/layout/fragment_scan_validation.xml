@@ -41,20 +41,20 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/validationRetakeButton"
+                android:id="@+id/validationCancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="12dp"
-                android:text="Retake" />
+                android:text="Cancel" />
 
             <Button
-                android:id="@+id/validationSubmitButton"
+                android:id="@+id/validationSaveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="12dp"
-                android:text="Submit" />
+                android:text="Save" />
 
 
         </LinearLayout>

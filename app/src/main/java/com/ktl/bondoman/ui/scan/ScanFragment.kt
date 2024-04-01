@@ -6,7 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,23 +19,43 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.databinding.FragmentScanBinding
+import com.ktl.bondoman.ui.twibbon.ScanValidationFragment
+import com.ktl.bondoman.ui.twibbon.TwibbonValidationFragment
+import java.io.File
+import java.io.FileOutputStream
+import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.ExecutorService
 
 private const val TAG = "cameraX"
 private const val FILE_NAME_FORMAT = "yy-MM-dd-HH-mm-ss-SSS"
 private const val REQUEST_CODE = 123
-private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+private const val IMAGE_REQUEST_CODE = 100
+private val REQUIRED_PERMISSIONS =
+    mutableListOf (
+        Manifest.permission.CAMERA,
+    ).apply {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+    }.toTypedArray()
 
 class ScanFragment : Fragment() {
     private lateinit var viewBinding: FragmentScanBinding
     private var imageCapture : ImageCapture? = null
     private lateinit var connectivityChangeReceiver: BroadcastReceiver
+    private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +83,74 @@ class ScanFragment : Fragment() {
             }
         }
 
+        viewBinding.cameraButton.setOnClickListener { takePhoto() }
+        viewBinding.galleryButton.setOnClickListener{pickImageFromGallery()}
+
         return viewBinding.root
+    }
+
+    private fun imageProxyToBitmap(image: ImageProxy): Bitmap? {
+        val planeProxy = image.planes[0]
+        val buffer: ByteBuffer = planeProxy.buffer
+        val bytes = ByteArray(buffer.remaining())
+        buffer.get(bytes)
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
+
+    private fun saveBitmapToFile(bitmap: Bitmap?, file: File) {
+        FileOutputStream(file).use { out ->
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, out)
+        }
+    }
+
+    private fun takePhoto() {
+        // Get a stable reference of the modifiable image capture use case
+        val imageCapture = imageCapture ?: return
+
+        // Set up image capture listener, which is triggered after photo has
+        // been taken
+        imageCapture.takePicture(
+            ContextCompat.getMainExecutor(requireContext()),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                }
+
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    super.onCaptureSuccess(image)
+                    // Change the image proxy to bit map
+                    val bitmap = imageProxyToBitmap(image)
+                    image.close()
+
+                    val tempFile = createTempFile()
+                    saveBitmapToFile(bitmap, tempFile)
+
+                    val savedUri = FileProvider.getUriForFile(
+                        requireContext(),
+                        "com.ktl.bondoman.provider",
+                        tempFile
+                    )
+
+                    val validationFrag = ScanValidationFragment.newInstance();
+                    getActivity()?.supportFragmentManager?.beginTransaction()
+                        ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
+                        ?.addToBackStack(null)
+                        ?.commit()
+
+//                    Intent(this@Kamera, ValidasiGambar::class.java).also { previewIntent ->
+//                        previewIntent.putExtra("image_uri", savedUri.toString())
+//                        startActivity(previewIntent)
+//                    }
+                }
+
+            }
+        )
+    }
+
+    fun pickImageFromGallery(){
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type="image/*"
+        startActivityForResult(intent, IMAGE_REQUEST_CODE )
     }
 
     fun checkPermissions() : Boolean{
@@ -109,6 +200,18 @@ class ScanFragment : Fragment() {
                 Log.d(TAG,"Start Camera Fails: ", e)
             }
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun createTempFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis())
+        val storageDir: File = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            deleteOnExit()
+        }
     }
 
 

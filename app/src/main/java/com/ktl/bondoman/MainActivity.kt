@@ -1,15 +1,13 @@
 package com.ktl.bondoman
 
 import NetworkReceiver
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
@@ -18,6 +16,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.ktl.bondoman.token.Token
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.auth.LoginActivity
@@ -52,6 +51,11 @@ class MainActivity : AppCompatActivity() {
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         receiver = NetworkReceiver.getInstance()
         this.registerReceiver(receiver, filter)
+
+        val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
+        val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
+        sideNavView.visibility = View.GONE
+        navView.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {
@@ -74,12 +78,15 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val navView: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        navView.setupWithNavController(navController)
+            val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
+            val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            navView.setupWithNavController(navController)
+            sideNavView.setupWithNavController(navController)
     }
+
     private fun setupPrefsListener() {
         val sharedPreferences = tokenManager.getSharedPreferences()
         prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
@@ -106,4 +113,17 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
+        val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
+        if (newConfig.orientation === android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+            sideNavView.visibility = View.VISIBLE
+            navView.visibility = View.GONE
+        } else if (newConfig.orientation === android.content.res.Configuration.ORIENTATION_PORTRAIT) {
+            sideNavView.visibility = View.GONE
+            navView.visibility = View.VISIBLE
+        }
+    }
+
 }
