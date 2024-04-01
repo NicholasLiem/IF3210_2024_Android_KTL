@@ -92,14 +92,18 @@ class TransactionAddFragment : Fragment() {
             val nim = nimEditText.text.toString()
             val title = titleEditText.text.toString()
             val amount = amountEditText.text.toString().toDoubleOrNull() ?: 0.0
-            val location = locationEditText.text.toString()
+            var location = locationEditText.text.toString()
             val category = when (categoryRadioGroup.checkedRadioButtonId) {
                 R.id.radioButtonIncome -> "Income"
                 R.id.radioButtonExpense -> "Expense"
                 else -> "" // Handle default case
             }
 
-            if (validateForm(title, amount, location, category)) {
+            if (validateForm(title, amount, category)) {
+                // Sets default value for location if not provided
+                if (location.isEmpty()) {
+                    location = "Lat: -6.8733093, Lon: 107.6050709"
+                }
                 // Insert data into database
                 transactionViewModel.insert(
                     Transaction(id, nim, title, category, amount, location))
@@ -162,7 +166,7 @@ class TransactionAddFragment : Fragment() {
         }
     }
 
-    private fun validateForm(title: String, amount: Double, location: String, category: String): Boolean {
+    private fun validateForm(title: String, amount: Double, category: String): Boolean {
         if (title.isEmpty()) {
             Toast.makeText(requireContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show()
             return false
@@ -170,11 +174,6 @@ class TransactionAddFragment : Fragment() {
 
         if (amount <= 0.0) {
             Toast.makeText(requireContext(), "Amount must be greater than 0", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        if (location.isEmpty()) {
-            Toast.makeText(requireContext(), "Location cannot be empty", Toast.LENGTH_SHORT).show()
             return false
         }
 
