@@ -6,4 +6,6 @@
     <!-- Access files in the Downloads directory -->
     <external-path name="downloads" path="Download/" />
     <files-path name="pdfs" path="pdfs/"/>
+
+    <external-path name="bondoman" path="." />
 </paths>

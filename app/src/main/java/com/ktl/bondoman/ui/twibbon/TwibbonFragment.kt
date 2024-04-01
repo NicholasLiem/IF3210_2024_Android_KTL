@@ -4,7 +4,10 @@ import NetworkReceiver
 import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +18,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.ktl.bondoman.R
 import com.ktl.bondoman.databinding.FragmentTwibbonBinding
+import java.io.File
+import java.io.FileOutputStream
+import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 private const val TAG = "cameraX"
@@ -32,6 +43,7 @@ class TwibbonFragment : Fragment() {
     private lateinit var viewBinding: FragmentTwibbonBinding
     private var imageCapture : ImageCapture? = null
     private lateinit var connectivityChangeReceiver: BroadcastReceiver
+    private var currentTwibbon : String = "twibbon1";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,7 +132,6 @@ class TwibbonFragment : Fragment() {
 
         // Set Default Val
         overlay.setImageResource(R.drawable.twibbon1)
-        var currentTwibbon = "twibbon1";
 
         // When button is clicked
         twibbon1.setOnClickListener {
@@ -145,13 +156,74 @@ class TwibbonFragment : Fragment() {
         }
 
         captureButton.setOnClickListener {
-            val validationFrag = TwibbonValidationFragment.newInstance();
-            getActivity()?.supportFragmentManager?.beginTransaction()
-                ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
-                ?.addToBackStack(null)
-                ?.commit()
+            takePhoto()
         }
 
+    }
+
+    private fun imageProxyToBitmap(image: ImageProxy): Bitmap? {
+        val planeProxy = image.planes[0]
+        val buffer: ByteBuffer = planeProxy.buffer
+        val bytes = ByteArray(buffer.remaining())
+        buffer.get(bytes)
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
+
+    private fun saveBitmapToFile(bitmap: Bitmap?, file: File) {
+        FileOutputStream(file).use { out ->
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, out)
+        }
+    }
+
+    private fun takePhoto() {
+        // Get a stable reference of the modifiable image capture use case
+        val imageCapture = imageCapture ?: return
+
+        // Set up image capture listener, which is triggered after photo has
+        // been taken
+        imageCapture.takePicture(
+            ContextCompat.getMainExecutor(requireContext()),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                }
+
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    super.onCaptureSuccess(image)
+                    // Change the image proxy to bit map
+                    val bitmap = imageProxyToBitmap(image)
+                    image.close()
+
+                    val tempFile = createTempFile()
+                    saveBitmapToFile(bitmap, tempFile)
+
+                    val savedUri = FileProvider.getUriForFile(
+                        requireContext(),
+                        "com.ktl.bondoman.fileprovider",
+                        tempFile
+                    )
+
+                    val validationFrag = TwibbonValidationFragment.newInstance(currentTwibbon, savedUri.toString());
+                    getActivity()?.supportFragmentManager?.beginTransaction()
+                        ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
+                        ?.addToBackStack(null)
+                        ?.commit()
+                }
+
+            }
+        )
+    }
+
+    private fun createTempFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis())
+        val storageDir: File = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            deleteOnExit()
+        }
     }
 
     override fun onDestroyView() {

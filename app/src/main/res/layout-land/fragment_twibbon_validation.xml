@@ -21,13 +21,15 @@
             android:paddingTop="32dp"
             android:paddingBottom="32dp">
 
-            <androidx.camera.view.PreviewView
+            <ImageView
                 android:id="@+id/cameraViewValidation"
                 android:layout_width="320dp"
                 android:layout_height="320dp"
-                android:gravity="center">
-
-            </androidx.camera.view.PreviewView>
+                android:background="@color/black"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:gravity="center"
+                android:layout_gravity="center"/>
 
             <ImageView
                 android:id="@+id/twibbonOverlayValidation"

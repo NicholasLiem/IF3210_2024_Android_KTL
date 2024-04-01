@@ -35,7 +35,7 @@
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -46,7 +46,8 @@
             android:screenOrientation="fullSensor" />
 <!--            android:configChanges="orientation|screenSize" /-->
         <activity android:name=".ui.auth.LoginActivity"
-            android:screenOrientation="fullSensor"/>
+            android:screenOrientation="portrait"/>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
