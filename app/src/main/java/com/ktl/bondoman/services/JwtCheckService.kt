@@ -1,6 +1,7 @@
 package com.ktl.bondoman.services
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
@@ -21,6 +22,24 @@ class JwtCheckService : Service() {
     companion object {
         private const val LOG_TAG = "JwtCheckService"
         private const val CHECK_INTERVAL = 1 * 60 * 1000L
+        fun startJwtCheckService(context: Context) {
+            val serviceIntent = Intent(context, JwtCheckService::class.java)
+            context.startService(serviceIntent)
+            val prefs = context.getSharedPreferences("ServicePrefs", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("isServiceRunning", true).apply()
+        }
+
+        fun stopJwtCheckService(context: Context) {
+            val serviceIntent = Intent(context, JwtCheckService::class.java)
+            context.stopService(serviceIntent)
+            val prefs = context.getSharedPreferences("ServicePrefs", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("isServiceRunning", false).apply()
+        }
+
+        fun isServiceRunning(context: Context): Boolean {
+            val prefs = context.getSharedPreferences("ServicePrefs", Context.MODE_PRIVATE)
+            return prefs.getBoolean("isServiceRunning", false)
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

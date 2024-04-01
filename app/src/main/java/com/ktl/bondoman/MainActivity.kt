@@ -41,7 +41,10 @@ class MainActivity : AppCompatActivity() {
         if (token == null || isTokenExpired(token)) {
             navigateToLogin()
         } else {
-            startJwtCheckService()
+            if (JwtCheckService.isServiceRunning(this)) {
+                JwtCheckService.stopJwtCheckService(this)
+            }
+            JwtCheckService.startJwtCheckService(this)
         }
 
         setupUIComponents()
@@ -131,11 +134,5 @@ class MainActivity : AppCompatActivity() {
             navView.visibility = View.VISIBLE
             toolbar.visibility = View.VISIBLE
         }
-    }
-
-
-    private fun startJwtCheckService() {
-        val serviceIntent = Intent(this, JwtCheckService::class.java)
-        startService(serviceIntent)
     }
 }
