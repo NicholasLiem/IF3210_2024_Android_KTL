@@ -1,7 +1,6 @@
 package com.ktl.bondoman.ui.settings
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -46,8 +45,7 @@ class SettingsFragment : Fragment() {
         val exportTransactionButton: Button = view.findViewById(R.id.export_transaction_button)
         val emailTransactionButton: Button = view.findViewById(R.id.email_transaction_button)
         val emailFormatRadioGroup: RadioGroup = view.findViewById(R.id.email_format_radio_group)
-        val gmapsButton: Button = view.findViewById(R.id.gmapsButton)
-
+        val randomizeTransactionButton: Button = view.findViewById(R.id.randomize_transaction_button)
         logOutButton.setOnClickListener {
             val sharedPreferences = tokenManager.getSharedPreferences()
             sharedPreferences.edit()?.apply {
@@ -97,11 +95,9 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        gmapsButton.setOnClickListener {
-            val gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988")
-            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-            mapIntent.setPackage("com.google.android.apps.maps")
-            startActivity(mapIntent)
+        randomizeTransactionButton.setOnClickListener {
+            val intent = Intent("com.ktl.bondoman.RANDOMIZE_TRANSACTION")
+            requireActivity().applicationContext.sendBroadcast(intent)
         }
     }
 

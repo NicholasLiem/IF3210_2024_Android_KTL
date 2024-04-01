@@ -1,9 +1,12 @@
 package com.ktl.bondoman.ui.transaction
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -80,5 +83,29 @@ class TransactionListFragment : Fragment() {
                 // Commit the transaction
                 ?.commit()
         }
+
+        adapter.setItemClickListener { transaction ->
+            val location = transaction.location
+            val regex = "-?\\d+\\.?\\d*".toRegex()
+            val matches = location?.let { regex.findAll(it).toList() }
+
+            if (location != null && matches != null && matches.size >= 2) {
+                val latitude = matches[0].value
+                val longitude = matches[1].value
+                val gmmIntentUri = Uri.parse("geo:$latitude,$longitude")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                startActivity(mapIntent)
+            } else if (location != null) {
+                val query = location.replace(' ', '+')
+                val gmmIntentUri = Uri.parse("geo:0,0?q=$query")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                startActivity(mapIntent)
+            } else {
+                Toast.makeText(requireContext(), "Location is not available for this transaction", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 }

@@ -71,8 +71,15 @@ class TransactionAddFragment : Fragment() {
         nimEditText.text = nim
         titleEditText.text = title
         amountEditText.text = amount
-        LocationUtils.getLastKnownLocation(requireActivity()) { locationString ->
-            locationEditText?.text = locationString
+
+        // Autofill location
+        if (!location.isNullOrEmpty()) {
+            //if (PermissionUtils.hasLocationPermission) {}
+            locationEditText.text = location
+        } else {
+            LocationUtils.getLastKnownLocation(requireActivity()) { locationString ->
+                locationEditText.text = locationString
+            }
         }
 
         // set category
@@ -154,6 +161,15 @@ class TransactionAddFragment : Fragment() {
                     putString(ARG_LOCATION, transaction.location)
                 }
             }
+
+        fun newInstance(title: String, category: String, amount: String) =
+            TransactionAddFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_TITLE, title)
+                    putString(ARG_CATEGORY, category)
+                    putString(ARG_AMOUNT, amount)
+                }
+            }
     }
 
     private fun parseArguments() {
@@ -199,5 +215,4 @@ class TransactionAddFragment : Fragment() {
             }
         }
     }
-
 }
