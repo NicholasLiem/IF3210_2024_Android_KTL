@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -39,14 +38,10 @@ import java.util.concurrent.ExecutorService
 private const val TAG = "cameraX"
 private const val REQUEST_CODE = 123
 private const val IMAGE_REQUEST_CODE = 100
-private val REQUIRED_PERMISSIONS =
-    mutableListOf (
-        Manifest.permission.CAMERA,
-    ).apply {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-    }.toTypedArray()
+private val REQUIRED_PERMISSIONS = arrayOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+)
 
 class ScanFragment : Fragment() {
     private lateinit var viewBinding: FragmentScanBinding
@@ -128,7 +123,7 @@ class ScanFragment : Fragment() {
                         tempFile
                     )
 
-                    val validationFrag = ScanValidationFragment.newInstance(savedUri.toString());
+                    val validationFrag = ScanValidationFragment.newInstance(savedUri.toString(), savedUri.path.toString(), true);
                     getActivity()?.supportFragmentManager?.beginTransaction()
                         ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
                         ?.addToBackStack(null)
@@ -144,6 +139,21 @@ class ScanFragment : Fragment() {
         intent.type="image/*"
         startActivityForResult(intent, IMAGE_REQUEST_CODE )
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK){
+            data?.data?.let { uri ->
+                val validationFrag = ScanValidationFragment.newInstance(uri.toString(), uri.path.toString(), false);
+                getActivity()?.supportFragmentManager?.beginTransaction()
+                    ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
+                    ?.addToBackStack(null)
+                    ?.commit()
+            } ?: Toast.makeText(requireContext(), "Error: No image selected!", Toast.LENGTH_LONG).show()
+        }
+    }
+
+
 
     fun checkPermissions() : Boolean{
         return ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED

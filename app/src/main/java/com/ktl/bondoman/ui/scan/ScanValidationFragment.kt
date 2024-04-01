@@ -32,7 +32,9 @@ import com.ktl.bondoman.ui.transaction.TransactionViewModel
 import com.ktl.bondoman.ui.transaction.TransactionViewModelFactory
 import kotlinx.coroutines.launch
 
-private const val ARG_IMG = "";
+private const val ARG_IMG = "image"
+private const val ARG_IMG_PATH = "image_path"
+private const val ARG_CAM = "cam"
 
 data class Item (
     val name : String,
@@ -41,6 +43,8 @@ data class Item (
 
 class ScanValidationFragment : Fragment() {
     private var img: String? = null
+    private var imgPath: String? = null
+    private var isCam : Boolean = true
     private lateinit var tokenManager: TokenManager
     private lateinit var receiver: NetworkReceiver
     private var itemArr = mutableListOf<Item>()
@@ -52,9 +56,10 @@ class ScanValidationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         arguments?.let {
             img = it.getString(ARG_IMG)
+            imgPath = it.getString(ARG_IMG_PATH)
+            isCam = it.getBoolean(ARG_CAM)
         }
 
         tokenManager = TokenManager(requireContext())
@@ -81,7 +86,7 @@ class ScanValidationFragment : Fragment() {
         }
 
         sendButton.setOnClickListener {
-            sendImage(img!!);
+            sendImage();
         }
 
         saveButton.setOnClickListener {
@@ -101,10 +106,12 @@ class ScanValidationFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(img : String) =
+        fun newInstance(img : String, imgPath : String, isCam: Boolean) =
             ScanValidationFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_IMG, img)
+                    putString(ARG_IMG_PATH, imgPath)
+                    putBoolean(ARG_CAM, isCam)
                 }
             }
     }
@@ -120,7 +127,7 @@ class ScanValidationFragment : Fragment() {
         requireActivity().unregisterReceiver(receiver)
     }
 
-    private fun sendImage(img: String) {
+    private fun sendImage() {
         if (!receiver.isConnected()) {
             Toast.makeText(requireContext(), "No internet connection, cannot send data!", Toast.LENGTH_SHORT).show()
             return
@@ -129,15 +136,24 @@ class ScanValidationFragment : Fragment() {
             try {
                 val token = tokenManager.getTokenStr()
 
+                var resPath = ""
                 val dir = Environment.getExternalStorageDirectory()
                 val path = dir.absolutePath
-                var imgPath = img.substringAfter("/bondoman")
-                imgPath = path + imgPath
+
+                if (isCam){
+                    resPath = img!!.substringAfter("/bondoman")
+                    resPath = path + resPath
+                } else {
+                    resPath = imgPath!!.substringAfter("/raw/")
+                }
+
+                requireActivity().runOnUiThread {
+                    Log.d("HEHEEHE", resPath)
+                }
 
 
-                val response = ApiClient.apiService.uploadBill("Bearer $token", BillUploadRequest(imgPath).toMultipartBodyPart())
+                val response = ApiClient.apiService.uploadBill("Bearer $token", BillUploadRequest(resPath).toMultipartBodyPart())
 
-                Toast.makeText(requireContext(), "Request is sent.", Toast.LENGTH_SHORT)
 
                 if (response.isSuccessful && response.body() != null) {
                     val responseBody = response.body()

@@ -28,8 +28,8 @@
         android:roundIcon="@mipmap/bondo_man_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BondoMan"
-        tools:ignore="HardcodedDebugMode"
         android:requestLegacyExternalStorage="true"
+        tools:ignore="HardcodedDebugMode"
         tools:targetApi="s">
 
         <activity
