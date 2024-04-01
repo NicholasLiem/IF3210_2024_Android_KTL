@@ -18,82 +18,95 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:padding="16dp"
-        android:background="@color/bondo_white"
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:fillViewport="true"
+        android:layout_gravity="center">
 
-        <!-- Button for Export Transaction History -->
-        <Button
-            android:id="@+id/export_transaction_button"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:paddingHorizontal="16dp"
+            android:background="@color/bondo_white"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Export Transaction History"
-            app:cornerRadius="8dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-
-        <!-- Button for Email Transaction History -->
-
-
-        <Button
-            android:id="@+id/email_transaction_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email Transaction History"
-            app:cornerRadius="8dp" />
-
-        <!-- RadioGroup for Email Format -->
-
-        <RadioGroup
-            android:id="@+id/email_format_radio_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
-            >
-
-            <RadioButton
-                android:id="@+id/email_xlsx_radio_button"
-                android:layout_width="wrap_content"
+            <!-- Button for Export Transaction History -->
+            <Button
+                android:id="@+id/export_transaction_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Export as XLSX"
-                android:tag="xlsx"
-                android:checked="true"
-                android:layout_marginEnd="8dp"/>
+                android:text="Export Transaction History"
+                app:cornerRadius="8dp"
+                android:layout_marginBottom="16dp"/>
 
-            <RadioButton
-                android:id="@+id/email_xls_radio_button"
-                android:layout_width="wrap_content"
+
+            <!-- Button for Email Transaction History -->
+
+
+            <Button
+                android:id="@+id/email_transaction_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="xls"
-                android:text="Export as XLS"
-                android:layout_marginStart="8dp"/>
-        </RadioGroup>
+                android:text="Email Transaction History"
+                app:cornerRadius="8dp" />
 
-        <Button
-            android:id="@+id/randomize_transaction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_weight="1"
-            android:text="Randomize Transaction"
-            app:cornerRadius="8dp" />
+            <!-- RadioGroup for Email Format -->
 
-        <Button
-            android:id="@+id/log_out_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/log_out"
-            app:cornerRadius="8dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="48dp"
-        />
+            <RadioGroup
+                android:id="@+id/email_format_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                >
 
-    </LinearLayout>
+                <RadioButton
+                    android:id="@+id/email_xlsx_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Export as XLSX"
+                    android:tag="xlsx"
+                    android:checked="true"
+                    android:layout_marginEnd="8dp"/>
+
+                <RadioButton
+                    android:id="@+id/email_xls_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="xls"
+                    android:text="Export as XLS"
+                    android:layout_marginStart="8dp"/>
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/randomize_transaction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
+                android:text="Randomize Transaction"
+                app:cornerRadius="8dp" />
+
+            <Button
+                android:id="@+id/gmapsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gmaps Button" />
+
+            <Button
+                android:id="@+id/log_out_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/log_out"
+                app:cornerRadius="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="24dp"
+                />
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

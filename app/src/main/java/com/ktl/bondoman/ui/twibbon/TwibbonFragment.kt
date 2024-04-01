@@ -117,7 +117,10 @@ class TwibbonFragment : Fragment() {
         var twibbon5 : ImageView= view.findViewById(R.id.twibbon5);
         var overlay: ImageView = view.findViewById(R.id.twibbonOverlay);
         var captureButton : Button = view.findViewById<Button>(R.id.captureButton)
-        var currentTwibbon = "";
+
+        // Set Default Val
+        overlay.setImageResource(R.drawable.twibbon1)
+        var currentTwibbon = "twibbon1";
 
         // When button is clicked
         twibbon1.setOnClickListener {

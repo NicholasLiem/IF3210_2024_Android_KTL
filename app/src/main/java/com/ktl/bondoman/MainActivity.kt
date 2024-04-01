@@ -6,13 +6,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.ktl.bondoman.services.JwtCheckService
 import com.ktl.bondoman.token.Token
 import com.ktl.bondoman.token.TokenManager
@@ -47,6 +50,22 @@ class MainActivity : AppCompatActivity() {
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         receiver = NetworkReceiver.getInstance()
         this.registerReceiver(receiver, filter)
+
+        val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
+        val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+
+        val currentOrientation = resources.configuration.orientation
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            sideNavView.visibility = View.VISIBLE
+            navView.visibility = View.GONE
+            toolbar.visibility = View.GONE
+        } else {
+            sideNavView.visibility = View.GONE
+            navView.visibility = View.VISIBLE
+            toolbar.visibility = View.VISIBLE
+        }
+
     }
 
     override fun onDestroy() {
@@ -58,11 +77,13 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val navView: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        navView.setupWithNavController(navController)
+            val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
+            val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            navView.setupWithNavController(navController)
+            sideNavView.setupWithNavController(navController)
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
@@ -96,6 +117,22 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
+        val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        if (newConfig.orientation === android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+            sideNavView.visibility = View.VISIBLE
+            navView.visibility = View.GONE
+            toolbar.visibility = View.GONE
+        } else if (newConfig.orientation === android.content.res.Configuration.ORIENTATION_PORTRAIT) {
+            sideNavView.visibility = View.GONE
+            navView.visibility = View.VISIBLE
+            toolbar.visibility = View.VISIBLE
+        }
+    }
+
 
     private fun startJwtCheckService() {
         val serviceIntent = Intent(this, JwtCheckService::class.java)
