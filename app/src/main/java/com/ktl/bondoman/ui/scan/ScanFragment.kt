@@ -1,5 +1,6 @@
 package com.ktl.bondoman.ui.scan
 
+import NetworkReceiver
 import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -17,10 +18,8 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.databinding.FragmentScanBinding
 
 private const val TAG = "cameraX"

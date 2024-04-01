@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ktl.bondoman.R
 import com.ktl.bondoman.databinding.FragmentTwibbonBinding
-import com.ktl.bondoman.databinding.FragmentTwibbonValidationBinding
 
 
 private const val TAG = "cameraX"

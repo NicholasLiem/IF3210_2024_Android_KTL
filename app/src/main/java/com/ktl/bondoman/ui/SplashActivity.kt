@@ -1,11 +1,8 @@
 package com.ktl.bondoman.ui
 
-import NetworkReceiver
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.widget.ProgressBar
