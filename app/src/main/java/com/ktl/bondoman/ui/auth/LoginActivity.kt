@@ -1,11 +1,11 @@
 package com.ktl.bondoman.ui.auth
 
 import NetworkReceiver
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,12 +15,15 @@ import com.ktl.bondoman.R
 import com.ktl.bondoman.network.ApiClient
 import com.ktl.bondoman.network.requests.LoginRequest
 import com.ktl.bondoman.token.TokenManager
+import com.ktl.bondoman.ui.components.LoadingButton
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var tokenManager: TokenManager
-
     private lateinit var receiver: NetworkReceiver
+    private lateinit var loadingButton: LoadingButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -29,12 +32,14 @@ class LoginActivity : AppCompatActivity() {
 
         val emailEditText = findViewById<EditText>(R.id.login_email_field)
         val passwordEditText = findViewById<EditText>(R.id.login_password_field)
-        val signInButton = findViewById<Button>(R.id.sign_in_button)
+        loadingButton = findViewById(R.id.loading_button)
+        loadingButton.setButtonText("Sign In")
+        val signInButton = loadingButton.getButton()
 
         signInButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
-
+            loadingButton.showLoading(true)
             login(email, password)
         }
 
@@ -43,13 +48,18 @@ class LoginActivity : AppCompatActivity() {
         this.registerReceiver(receiver, filter)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun login(email: String, password: String) {
         if (!receiver.isConnected()) {
             Toast.makeText(this, "No internet connection, cannot login!", Toast.LENGTH_SHORT).show()
+            loadingButton.showLoading(false)
             return
         }
+
         lifecycleScope.launch {
             try {
+                delay(1000)
+
                 val response = ApiClient.apiService.login(LoginRequest(email, password))
                 if (response.isSuccessful && response.body() != null) {
                     val token = response.body()?.token
@@ -73,6 +83,8 @@ class LoginActivity : AppCompatActivity() {
                 runOnUiThread {
                     Toast.makeText(this@LoginActivity, "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
                 }
+            } finally {
+                loadingButton.showLoading(false)
             }
         }
     }
@@ -80,6 +92,4 @@ class LoginActivity : AppCompatActivity() {
         super.onDestroy()
         this.unregisterReceiver(receiver)
     }
-
-
 }

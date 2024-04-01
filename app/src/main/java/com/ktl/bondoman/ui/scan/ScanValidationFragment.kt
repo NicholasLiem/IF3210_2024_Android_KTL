@@ -1,7 +1,6 @@
 package com.ktl.bondoman.ui.twibbon
 
 import NetworkReceiver
-import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -20,13 +19,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.R
 import com.ktl.bondoman.TransactionApplication
 import com.ktl.bondoman.db.Transaction
 import com.ktl.bondoman.network.ApiClient
 import com.ktl.bondoman.network.requests.BillUploadRequest
-import com.ktl.bondoman.network.requests.LoginRequest
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.transaction.TransactionViewModel
 import com.ktl.bondoman.ui.transaction.TransactionViewModelFactory
@@ -137,7 +134,7 @@ class ScanValidationFragment : Fragment() {
 
                 val response = ApiClient.apiService.uploadBill("Bearer $token", BillUploadRequest(imgPath).toMultipartBodyPart())
 
-                Toast.makeText(requireContext(), "Request is sent.", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Request is sent.", Toast.LENGTH_SHORT).show()
 
                 if (response.isSuccessful && response.body() != null) {
                     val responseBody = response.body()
