@@ -1,16 +1,15 @@
 package com.ktl.bondoman
 
 import NetworkReceiver
+import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
-import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
@@ -54,8 +53,19 @@ class MainActivity : AppCompatActivity() {
 
         val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
         val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
-        sideNavView.visibility = View.GONE
-        navView.visibility = View.VISIBLE
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+
+        val currentOrientation = resources.configuration.orientation
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            sideNavView.visibility = View.VISIBLE
+            navView.visibility = View.GONE
+            toolbar.visibility = View.GONE
+        } else {
+            sideNavView.visibility = View.GONE
+            navView.visibility = View.VISIBLE
+            toolbar.visibility = View.VISIBLE
+        }
+
     }
 
     override fun onDestroy() {
@@ -76,22 +86,12 @@ class MainActivity : AppCompatActivity() {
             sideNavView.setupWithNavController(navController)
     }
 
-<<<<<<< HEAD
-    private fun setupPrefsListener() {
-        val sharedPreferences = tokenManager.getSharedPreferences()
-        prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            if (key == "tokenExpired" && prefs.getBoolean(key, false)) {
-                with(prefs.edit()) {
-                    remove("tokenExpired")
-                    apply()
-=======
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private fun setupTokenExpiryReceiver() {
         tokenExpiryReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (intent?.action == "com.ktl.bondoman.ACTION_TOKEN_EXPIRED") {
                     navigateToLogin()
->>>>>>> 29462a7dee5cdb2e3c7412be443e860da98144d2
                 }
             }
         }
@@ -117,25 +117,25 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-<<<<<<< HEAD
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig)
         val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
         val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         if (newConfig.orientation === android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
             sideNavView.visibility = View.VISIBLE
             navView.visibility = View.GONE
+            toolbar.visibility = View.GONE
         } else if (newConfig.orientation === android.content.res.Configuration.ORIENTATION_PORTRAIT) {
             sideNavView.visibility = View.GONE
             navView.visibility = View.VISIBLE
+            toolbar.visibility = View.VISIBLE
         }
     }
 
-=======
 
     private fun startJwtCheckService() {
         val serviceIntent = Intent(this, JwtCheckService::class.java)
         startService(serviceIntent)
     }
->>>>>>> 29462a7dee5cdb2e3c7412be443e860da98144d2
 }
