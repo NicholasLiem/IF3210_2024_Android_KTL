@@ -53,4 +53,4 @@ Aplikasi BondoMan adalah aplikasi Android yang berfungsi sebagai pencatatan keua
 |--------------------------|------------|---------------|-------|
 | Juan Christopher Santoso | 13521116   | <ul> <li> Melakukan scan nota </li> <li> Melihat graf rangkuman trx </li> <li> Broadcast receiver - randomize trx </li> </ul>              | 40 jam|
 | William Nixon            | 13521123   | <ul>  <li> Manipulasi trx </li> <li> Melihat daftar trx </li> <li> Menyimpan trx dalam xlsx, xls </li> <li> Intent Gmail </li> <li> Network Sensing </li> </ul>             | 40 jam |
-| Nicholas Liem            | 13521135   | <ul> <li> Header and Navbar</li> <li> Login </li> <li> Logout </li> <li> Manipulasi trx (location service) </li> <li> Melihat daftar trx</li> <li> Background service </li> <li> Intent to Gmaps </li> </ul>            | 40 jam|
+| Nicholas Liem            | 13521135   | <ul> <li> Header and Navbar</li> <li> Login </li> <li> Logout </li> <li> Manipulasi trx (location service) </li> <li> Background service </li> <li> Intent to Gmaps </li> </ul>            | 40 jam|
