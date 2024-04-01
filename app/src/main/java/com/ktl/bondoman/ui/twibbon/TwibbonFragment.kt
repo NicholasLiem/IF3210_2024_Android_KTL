@@ -27,6 +27,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.ktl.bondoman.R
 import com.ktl.bondoman.databinding.FragmentTwibbonBinding
+import com.ktl.bondoman.ui.components.LoadingButton
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
@@ -41,8 +42,8 @@ private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
 class TwibbonFragment : Fragment() {
     private lateinit var viewBinding: FragmentTwibbonBinding
-    private var imageCapture : ImageCapture? = null
     private lateinit var connectivityChangeReceiver: BroadcastReceiver
+    private var imageCapture : ImageCapture? = null
     private var currentTwibbon : String = "twibbon1";
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,13 +123,15 @@ class TwibbonFragment : Fragment() {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = "Twibbon"
 
-        var twibbon1 : ImageView= view.findViewById(R.id.twibbon1);
-        var twibbon2 : ImageView= view.findViewById(R.id.twibbon2);
-        var twibbon3 : ImageView= view.findViewById(R.id.twibbon3);
-        var twibbon4 : ImageView= view.findViewById(R.id.twibbon4);
-        var twibbon5 : ImageView= view.findViewById(R.id.twibbon5);
-        var overlay: ImageView = view.findViewById(R.id.twibbonOverlay);
-        var captureButton : Button = view.findViewById<Button>(R.id.captureButton)
+        val captureLoadingButton: LoadingButton = view.findViewById(R.id.loading_button)
+        captureLoadingButton.setButtonText("Capture")
+        val twibbon1 : ImageView= view.findViewById(R.id.twibbon1)
+        val twibbon2 : ImageView= view.findViewById(R.id.twibbon2)
+        val twibbon3 : ImageView= view.findViewById(R.id.twibbon3)
+        val twibbon4 : ImageView= view.findViewById(R.id.twibbon4)
+        val twibbon5 : ImageView= view.findViewById(R.id.twibbon5)
+        val overlay: ImageView = view.findViewById(R.id.twibbonOverlay)
+        val captureButton : Button = captureLoadingButton.getButton()
 
         // Set Default Val
         overlay.setImageResource(R.drawable.twibbon1)
@@ -156,6 +159,7 @@ class TwibbonFragment : Fragment() {
         }
 
         captureButton.setOnClickListener {
+            captureLoadingButton.showLoading(true)
             takePhoto()
         }
 
