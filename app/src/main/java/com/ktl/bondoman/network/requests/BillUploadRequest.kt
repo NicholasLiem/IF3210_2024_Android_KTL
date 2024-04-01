@@ -10,7 +10,7 @@ data class BillUploadRequest(
 ) {
     fun toMultipartBodyPart(): MultipartBody.Part {
         val file = File(filePath)
-        val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val requestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("file", file.toString(), requestBody)
     }
 }

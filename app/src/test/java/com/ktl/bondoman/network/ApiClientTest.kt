@@ -29,9 +29,10 @@ class ApiClientTest {
     @Test
     fun `test bill upload`() = runBlocking {
         val apiClient = ApiClient
+        val cwd = System.getProperty("user.dir")
 
-        val filePath = "fixtures/Cat03.jpg"
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaW0iOiIxMzUyMTEzNSIsImlhdCI6MTcwOTkxODE2MiwiZXhwIjoxNzA5OTE4NDYyfQ.__NSgZSsksqISvkYvNbuhyNjOxObG1B8tegMIhiCYfc"
+        val filePath = "$cwd/src/test/java/com/ktl/bondoman/network/fixtures/Cat03.png"
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuaW0iOiIxMzUyMTEzNSIsImlhdCI6MTcxMTk2NTc2MywiZXhwIjoxNzExOTY2MDYzfQ.nk3VsPKRXtV1JpbC1LSVsmNryhex4qyE_kVMV0mwO3Y"
         val response = apiClient.apiService.uploadBill("Bearer $token", BillUploadRequest(filePath).toMultipartBodyPart())
         assertEquals(401, response.code())
     }
