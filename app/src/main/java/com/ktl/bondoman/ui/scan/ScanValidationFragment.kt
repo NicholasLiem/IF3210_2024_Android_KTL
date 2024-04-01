@@ -30,7 +30,6 @@ import com.ktl.bondoman.ui.transaction.TransactionViewModelFactory
 import kotlinx.coroutines.launch
 
 private const val ARG_IMG = "image"
-private const val ARG_IMG_PATH = "image_path"
 private const val ARG_CAM = "cam"
 
 data class Item (
@@ -55,7 +54,6 @@ class ScanValidationFragment : Fragment() {
 
         arguments?.let {
             img = it.getString(ARG_IMG)
-            imgPath = it.getString(ARG_IMG_PATH)
             isCam = it.getBoolean(ARG_CAM)
         }
 
@@ -103,11 +101,10 @@ class ScanValidationFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(img : String, imgPath : String, isCam: Boolean) =
+        fun newInstance(img : String, isCam: Boolean) =
             ScanValidationFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_IMG, img)
-                    putString(ARG_IMG_PATH, imgPath)
                     putBoolean(ARG_CAM, isCam)
                 }
             }
@@ -137,16 +134,13 @@ class ScanValidationFragment : Fragment() {
                 val dir = Environment.getExternalStorageDirectory()
                 val path = dir.absolutePath
 
-                if (isCam){
-                    resPath = img!!.substringAfter("/bondoman")
-                    resPath = path + resPath
-                } else {
-                    resPath = imgPath!!.substringAfter("/raw/")
-                }
+                resPath = img!!.substringAfter("/bondoman")
+                resPath = path + resPath
 
-                requireActivity().runOnUiThread {
-                    Log.d("HEHEEHE", resPath)
-                }
+
+//                requireActivity().runOnUiThread {
+//                    Log.d("HEHEEHE", resPath)
+//                }
 
 
                 val response = ApiClient.apiService.uploadBill("Bearer $token", BillUploadRequest(resPath).toMultipartBodyPart())

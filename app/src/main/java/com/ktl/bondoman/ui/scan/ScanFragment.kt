@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -29,7 +30,10 @@ import androidx.fragment.app.Fragment
 import com.ktl.bondoman.databinding.FragmentScanBinding
 import com.ktl.bondoman.ui.twibbon.ScanValidationFragment
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -123,7 +127,7 @@ class ScanFragment : Fragment() {
                         tempFile
                     )
 
-                    val validationFrag = ScanValidationFragment.newInstance(savedUri.toString(), savedUri.path.toString(), true);
+                    val validationFrag = ScanValidationFragment.newInstance(savedUri.toString(),true);
                     getActivity()?.supportFragmentManager?.beginTransaction()
                         ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
                         ?.addToBackStack(null)
@@ -140,11 +144,39 @@ class ScanFragment : Fragment() {
         startActivityForResult(intent, IMAGE_REQUEST_CODE )
     }
 
+    fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+        var inputStream: InputStream? = null
+        try {
+            inputStream = context.contentResolver.openInputStream(uri)
+            return BitmapFactory.decodeStream(inputStream)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                inputStream?.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        return null
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK){
             data?.data?.let { uri ->
-                val validationFrag = ScanValidationFragment.newInstance(uri.toString(), uri.path.toString(), false);
+                val bitmap : Bitmap? = getBitmapFromUri(requireContext(), uri)
+
+                val tempFile = createTempFile()
+                saveBitmapToFile(bitmap, tempFile)
+
+                val savedUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    "com.ktl.bondoman.fileprovider",
+                    tempFile
+                )
+
+                val validationFrag = ScanValidationFragment.newInstance(savedUri.toString(),false);
                 getActivity()?.supportFragmentManager?.beginTransaction()
                     ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
                     ?.addToBackStack(null)
@@ -152,8 +184,6 @@ class ScanFragment : Fragment() {
             } ?: Toast.makeText(requireContext(), "Error: No image selected!", Toast.LENGTH_LONG).show()
         }
     }
-
-
 
     fun checkPermissions() : Boolean{
         return ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
