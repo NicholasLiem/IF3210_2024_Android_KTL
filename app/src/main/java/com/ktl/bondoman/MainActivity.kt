@@ -8,28 +8,27 @@ import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
+import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.ktl.bondoman.services.JwtCheckService
 import com.ktl.bondoman.token.Token
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.auth.LoginActivity
 import com.ktl.bondoman.utils.PermissionUtils
-import com.ktl.bondoman.workers.TokenExpiryWorker
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tokenManager: TokenManager
-    private lateinit var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener
-    public lateinit var receiver: NetworkReceiver
+    private lateinit var receiver: NetworkReceiver
+    private lateinit var tokenExpiryReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +36,13 @@ class MainActivity : AppCompatActivity() {
         tokenManager = TokenManager(this)
 
         PermissionUtils.requestLocationPermissions(this, PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE)
-        setupPrefsListener()
-        scheduleTokenExpiryCheck()
+        setupTokenExpiryReceiver()
 
         val token = tokenManager.loadToken()
         if (token == null || isTokenExpired(token)) {
             navigateToLogin()
+        } else {
+            startJwtCheckService()
         }
 
         setupUIComponents()
@@ -61,17 +61,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         this.unregisterReceiver(receiver)
-        tokenManager.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(prefsListener)
-    }
-
-
-    private fun scheduleTokenExpiryCheck() {
-        val workRequest = OneTimeWorkRequestBuilder<TokenExpiryWorker>()
-            .setInitialDelay(30, TimeUnit.SECONDS)
-            .build()
-
-        WorkManager.getInstance(this)
-            .enqueueUniqueWork("TokenExpiryCheck", ExistingWorkPolicy.REPLACE, workRequest)
     }
 
     private fun setupUIComponents() {
@@ -87,6 +76,7 @@ class MainActivity : AppCompatActivity() {
             sideNavView.setupWithNavController(navController)
     }
 
+<<<<<<< HEAD
     private fun setupPrefsListener() {
         val sharedPreferences = tokenManager.getSharedPreferences()
         prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
@@ -94,11 +84,24 @@ class MainActivity : AppCompatActivity() {
                 with(prefs.edit()) {
                     remove("tokenExpired")
                     apply()
+=======
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    private fun setupTokenExpiryReceiver() {
+        tokenExpiryReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == "com.ktl.bondoman.ACTION_TOKEN_EXPIRED") {
+                    navigateToLogin()
+>>>>>>> 29462a7dee5cdb2e3c7412be443e860da98144d2
                 }
-                navigateToLogin()
             }
         }
-        sharedPreferences.registerOnSharedPreferenceChangeListener(prefsListener)
+        val filter = IntentFilter("com.ktl.bondoman.ACTION_TOKEN_EXPIRED")
+        applicationContext.registerReceiver(tokenExpiryReceiver, filter)
+    }
+
+    private fun stopJwtCheckService() {
+        val serviceIntent = Intent(this, JwtCheckService::class.java)
+        stopService(serviceIntent)
     }
 
     private fun isTokenExpired(token: Token): Boolean {
@@ -110,9 +113,11 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToLogin() {
         TokenManager(this).clearToken()
         val intent = Intent(this, LoginActivity::class.java)
+        stopJwtCheckService()
         startActivity(intent)
         finish()
     }
+<<<<<<< HEAD
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig)
         val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
@@ -126,4 +131,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+=======
+
+    private fun startJwtCheckService() {
+        val serviceIntent = Intent(this, JwtCheckService::class.java)
+        startService(serviceIntent)
+    }
+>>>>>>> 29462a7dee5cdb2e3c7412be443e860da98144d2
 }

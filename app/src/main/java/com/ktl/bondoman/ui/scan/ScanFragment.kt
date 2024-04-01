@@ -1,5 +1,6 @@
 package com.ktl.bondoman.ui.scan
 
+import NetworkReceiver
 import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -23,11 +24,9 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.databinding.FragmentScanBinding
 import com.ktl.bondoman.ui.twibbon.ScanValidationFragment
 import com.ktl.bondoman.ui.twibbon.TwibbonValidationFragment

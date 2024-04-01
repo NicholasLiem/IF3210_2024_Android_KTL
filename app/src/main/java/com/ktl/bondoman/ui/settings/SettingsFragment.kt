@@ -1,6 +1,7 @@
 package com.ktl.bondoman.ui.settings
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,23 +13,16 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.ktl.bondoman.MainActivity
 import com.ktl.bondoman.R
 import com.ktl.bondoman.TransactionApplication
 import com.ktl.bondoman.token.TokenManager
-import com.ktl.bondoman.ui.transaction.TransactionViewModel
-import com.ktl.bondoman.ui.transaction.TransactionViewModelFactory
 import com.ktl.bondoman.utils.ExporterUtils
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
     private lateinit var tokenManager: TokenManager
-    private var param1: String? = null
-    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +46,7 @@ class SettingsFragment : Fragment() {
         val exportTransactionButton: Button = view.findViewById(R.id.export_transaction_button)
         val emailTransactionButton: Button = view.findViewById(R.id.email_transaction_button)
         val emailFormatRadioGroup: RadioGroup = view.findViewById(R.id.email_format_radio_group)
-
+        val gmapsButton: Button = view.findViewById(R.id.gmapsButton)
 
         logOutButton.setOnClickListener {
             val sharedPreferences = tokenManager.getSharedPreferences()
@@ -101,6 +95,13 @@ class SettingsFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+        }
+
+        gmapsButton.setOnClickListener {
+            val gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            startActivity(mapIntent)
         }
     }
 

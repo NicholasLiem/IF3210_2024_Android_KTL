@@ -27,7 +27,7 @@ data class Transaction(
     val amount: Double,
 
     @ColumnInfo(name = "location")
-    val location: String? = null,
+    val location: String? = "Lat: -6.8733093, Lon: 107.6050709",
 
     @ColumnInfo(name = "date")
     val date: Long = System.currentTimeMillis()
