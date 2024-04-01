@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Add New Transaction"
+            android:text="Transaction Details"
             android:textAlignment="center"
             android:textColor="@color/gunmetal_gray"
             android:textSize="24sp"
