@@ -1,5 +1,6 @@
 package com.ktl.bondoman.network
 
+import com.ktl.bondoman.network.reponses.BillUploadResponse
 import com.ktl.bondoman.network.reponses.CheckTokenExpirationResponse
 import com.ktl.bondoman.network.reponses.LoginResponse
 import com.ktl.bondoman.network.requests.LoginRequest
@@ -21,5 +22,5 @@ interface ApiService {
 
     @Multipart
     @POST("/api/bill/upload")
-    suspend fun uploadBill(@Header("Authorization") token: String, @Part file: MultipartBody.Part): Response<ResponseBody>
+    suspend fun uploadBill(@Header("Authorization") token: String, @Part file: MultipartBody.Part): Response<BillUploadResponse>
 }
