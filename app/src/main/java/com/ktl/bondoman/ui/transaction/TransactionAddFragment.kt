@@ -71,8 +71,15 @@ class TransactionAddFragment : Fragment() {
         nimEditText.text = nim
         titleEditText.text = title
         amountEditText.text = amount
-        LocationUtils.getLastKnownLocation(requireActivity()) { locationString ->
-            locationEditText?.text = locationString
+
+        // Autofill location
+        if (!location.isNullOrEmpty()) {
+            //if (PermissionUtils.hasLocationPermission) {}
+            locationEditText.text = location
+        } else {
+            LocationUtils.getLastKnownLocation(requireActivity()) { locationString ->
+                locationEditText.text = locationString
+            }
         }
 
         // set category
@@ -199,5 +206,4 @@ class TransactionAddFragment : Fragment() {
             }
         }
     }
-
 }
