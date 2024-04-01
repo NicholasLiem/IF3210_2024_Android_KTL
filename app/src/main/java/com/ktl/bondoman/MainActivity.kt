@@ -64,10 +64,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        if (isNetworkReceiverRegistered) {
+        if (isNetworkReceiverRegistered && receiver.isListening()) {
             applicationContext.unregisterReceiver(receiver)
             isNetworkReceiverRegistered = false
+            receiver.setListening(false)
         }
         if (isTokenExpiryReceiverRegistered) {
             applicationContext.unregisterReceiver(tokenExpiryReceiver)
@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity() {
             applicationContext.unregisterReceiver(randomizeTransactionReceiver)
             isRandomizeTransactionReceiverRegistered = false
         }
+        super.onDestroy()
     }
 
     private fun setupUIComponents() {
@@ -143,6 +144,7 @@ class MainActivity : AppCompatActivity() {
         if (!isNetworkReceiverRegistered){
             applicationContext.registerReceiver(receiver, filter)
             isNetworkReceiverRegistered = true
+            receiver.setListening(true);
         }
     }
 
