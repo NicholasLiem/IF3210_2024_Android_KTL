@@ -37,7 +37,6 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 
 private const val TAG = "cameraX"
-private const val FILE_NAME_FORMAT = "yy-MM-dd-HH-mm-ss-SSS"
 private const val REQUEST_CODE = 123
 private const val IMAGE_REQUEST_CODE = 100
 private val REQUIRED_PERMISSIONS =
@@ -129,7 +128,7 @@ class ScanFragment : Fragment() {
                         tempFile
                     )
 
-                    val validationFrag = ScanValidationFragment.newInstance();
+                    val validationFrag = ScanValidationFragment.newInstance(savedUri.toString());
                     getActivity()?.supportFragmentManager?.beginTransaction()
                         ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
                         ?.addToBackStack(null)

@@ -1,10 +1,12 @@
 package com.ktl.bondoman.ui.twibbon
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.ktl.bondoman.R
@@ -28,8 +30,9 @@ class ScanValidationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_scan_validation, container, false)
-        val cancelButton: Button = view.findViewById<Button>(R.id.validationCancelButton);
-        val saveButton: Button = view.findViewById<Button>(R.id.validationSaveButton);
+        val cancelButton: Button = view.findViewById<Button>(R.id.validationCancelButton)
+        val sendButton: Button = view.findViewById<Button>(R.id.validationSendButton)
+        val saveButton: Button = view.findViewById<Button>(R.id.validationSaveButton)
 
         cancelButton.setOnClickListener {
             activity?.supportFragmentManager?.popBackStackImmediate()
@@ -38,12 +41,18 @@ class ScanValidationFragment : Fragment() {
         saveButton.setOnClickListener {
             activity?.supportFragmentManager?.popBackStackImmediate()
         }
+
+        val imageView: ImageView = view.findViewById(R.id.scanResultImage)
+        val imageUri = Uri.parse(img)
+        imageView.setImageURI(imageUri)
+
+        saveButton.visibility = View.GONE
+
         return view;
     }
 
     companion object {
-
-        fun newInstance() =
+        fun newInstance(img : String) =
             ScanValidationFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_IMG, img)

@@ -39,6 +39,10 @@ android {
     }
 }
 
+repositories {
+    maven { url = uri("https://www.jitpack.io" ) }
+}
+
 dependencies {
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
@@ -82,5 +86,7 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:5.2.4")
 
     implementation("org.apache.xmlbeans:xmlbeans:5.1.0")
+
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }
