@@ -20,12 +20,13 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionViewHolder>(Trans
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current, editClickListener, deleteClickListener)
+        holder.bind(current, editClickListener, deleteClickListener, itemClickListener)
     }
 
     // Click listeners for edit and delete buttons
     private var editClickListener: ((Transaction) -> Unit)? = null
     private var deleteClickListener: ((Transaction) -> Unit)? = null
+    private var itemClickListener: ((Transaction) -> Unit)? = null
 
     // Function to set edit button click listener
     fun setOnEditClickListener(listener: (Transaction) -> Unit) {
@@ -34,6 +35,10 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionViewHolder>(Trans
 
     fun setOnDeleteClickListener(listener: (Transaction) -> Unit) {
         deleteClickListener = listener
+    }
+
+    fun setItemClickListener(listener: (Transaction) -> Unit) {
+        itemClickListener = listener
     }
 }
 
@@ -50,7 +55,7 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
 
     @SuppressLint("SetTextI18n")
-    fun bind(current: Transaction, editClickListener: ((Transaction) -> Unit)?, deleteClickListener: ((Transaction) -> Unit)?){
+    fun bind(current: Transaction, editClickListener: ((Transaction) -> Unit)?, deleteClickListener: ((Transaction) -> Unit)?, itemClickListener: ((Transaction) -> Unit)?) {
         titleView.text = "Title: " + current.title
         dateView.text = "Date: " + Transaction.getDateString(current.date)
         amountView.text = "Amount: Rp" + current.amount.toString()
@@ -63,6 +68,10 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
         buttonDelete.setOnClickListener {
             deleteClickListener?.invoke(current)
+        }
+
+        itemView.setOnClickListener {
+            itemClickListener?.invoke(current)
         }
     }
 
