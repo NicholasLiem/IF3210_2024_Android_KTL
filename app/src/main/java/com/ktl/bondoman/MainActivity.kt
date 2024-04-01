@@ -20,6 +20,7 @@ import com.ktl.bondoman.services.JwtCheckService
 import com.ktl.bondoman.token.Token
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.auth.LoginActivity
+import com.ktl.bondoman.ui.transaction.TransactionAddFragment
 import com.ktl.bondoman.utils.PermissionUtils
 
 
@@ -28,6 +29,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tokenManager: TokenManager
     private lateinit var receiver: NetworkReceiver
     private lateinit var tokenExpiryReceiver: BroadcastReceiver
+    private lateinit var randomizeTransactionReceiver: BroadcastReceiver
+
+    private var isNetworkReceiverRegistered = false
+    private var isTokenExpiryReceiverRegistered = false
+    private var isRandomizeTransactionReceiverRegistered = false
+
+    companion object {
+        const val ACTION_TOKEN_EXPIRED = "com.ktl.bondoman.ACTION_TOKEN_EXPIRED"
+        const val ACTION_RANDOMIZE_TRANSACTION = "com.ktl.bondoman.RANDOMIZE_TRANSACTION"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +46,11 @@ class MainActivity : AppCompatActivity() {
         tokenManager = TokenManager(this)
 
         PermissionUtils.requestLocationPermissions(this, PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE)
+
         setupTokenExpiryReceiver()
+        setupRandomizeTransactionReceiver()
+        setupNetworkReceiver()
+        setupUIComponents()
 
         val token = tokenManager.loadToken()
         if (token == null || isTokenExpired(token)) {
@@ -46,17 +61,35 @@ class MainActivity : AppCompatActivity() {
             }
             JwtCheckService.startJwtCheckService(this)
         }
+    }
 
-        setupUIComponents()
+    override fun onDestroy() {
+        super.onDestroy()
+        if (isNetworkReceiverRegistered) {
+            applicationContext.unregisterReceiver(receiver)
+            isNetworkReceiverRegistered = false
+        }
+        if (isTokenExpiryReceiverRegistered) {
+            applicationContext.unregisterReceiver(tokenExpiryReceiver)
+            isTokenExpiryReceiverRegistered = false
+        }
+        if (isRandomizeTransactionReceiverRegistered) {
+            applicationContext.unregisterReceiver(randomizeTransactionReceiver)
+            isRandomizeTransactionReceiverRegistered = false
+        }
+    }
 
-        // Registers BroadcastReceiver to track network connection changes.
-        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        receiver = NetworkReceiver.getInstance()
-        this.registerReceiver(receiver, filter)
+    private fun setupUIComponents() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
         val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        navView.setupWithNavController(navController)
+        sideNavView.setupWithNavController(navController)
 
         val currentOrientation = resources.configuration.orientation
         if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -68,38 +101,49 @@ class MainActivity : AppCompatActivity() {
             navView.visibility = View.VISIBLE
             toolbar.visibility = View.VISIBLE
         }
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        this.unregisterReceiver(receiver)
-    }
-
-    private fun setupUIComponents() {
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-            val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
-            val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            val navController = navHostFragment.navController
-            navView.setupWithNavController(navController)
-            sideNavView.setupWithNavController(navController)
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private fun setupTokenExpiryReceiver() {
         tokenExpiryReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent?.action == "com.ktl.bondoman.ACTION_TOKEN_EXPIRED") {
+                if (intent?.action == ACTION_TOKEN_EXPIRED) {
                     navigateToLogin()
                 }
             }
         }
-        val filter = IntentFilter("com.ktl.bondoman.ACTION_TOKEN_EXPIRED")
-        applicationContext.registerReceiver(tokenExpiryReceiver, filter)
+        val filter = IntentFilter(ACTION_TOKEN_EXPIRED)
+        if (!isTokenExpiryReceiverRegistered){
+            applicationContext.registerReceiver(tokenExpiryReceiver, filter)
+            isTokenExpiryReceiverRegistered = true
+        }
+    }
+
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    private fun setupRandomizeTransactionReceiver() {
+        randomizeTransactionReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == ACTION_RANDOMIZE_TRANSACTION) {
+                    navigateToAddTransaction()
+                }
+            }
+        }
+
+        val filter = IntentFilter(ACTION_RANDOMIZE_TRANSACTION)
+        if (!isRandomizeTransactionReceiverRegistered) {
+            applicationContext.registerReceiver(randomizeTransactionReceiver, filter)
+            isRandomizeTransactionReceiverRegistered = true
+        }
+    }
+
+    private fun setupNetworkReceiver() {
+        // Registers BroadcastReceiver to track network connection changes.
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        receiver = NetworkReceiver.getInstance()
+        if (!isNetworkReceiverRegistered){
+            applicationContext.registerReceiver(receiver, filter)
+            isNetworkReceiverRegistered = true
+        }
     }
 
     private fun stopJwtCheckService() {
@@ -120,6 +164,24 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+    private fun navigateToAddTransaction() {
+        if (!isFinishing && !isDestroyed) {
+            val randomTitle = "Transaction ${(1..100).random()}"
+            val randomAmount = "%.2f".format((1..10000).random() / 100.0)
+            val categories = listOf("Income", "Expense")
+            val randomCategory = categories.random()
+            val transactionAddFragment = TransactionAddFragment.newInstance(randomTitle, randomCategory, randomAmount)
+
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.nav_host_fragment, transactionAddFragment)
+                addToBackStack(null)
+                commit()
+            }
+        }
+    }
+
+
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig)
         val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)

@@ -45,6 +45,7 @@ class SettingsFragment : Fragment() {
         val exportTransactionButton: Button = view.findViewById(R.id.export_transaction_button)
         val emailTransactionButton: Button = view.findViewById(R.id.email_transaction_button)
         val emailFormatRadioGroup: RadioGroup = view.findViewById(R.id.email_format_radio_group)
+        val randomizeTransactionButton: Button = view.findViewById(R.id.randomize_transaction_button)
         logOutButton.setOnClickListener {
             val sharedPreferences = tokenManager.getSharedPreferences()
             sharedPreferences.edit()?.apply {
@@ -92,6 +93,11 @@ class SettingsFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+        }
+
+        randomizeTransactionButton.setOnClickListener {
+            val intent = Intent("com.ktl.bondoman.RANDOMIZE_TRANSACTION")
+            requireActivity().applicationContext.sendBroadcast(intent)
         }
     }
 
