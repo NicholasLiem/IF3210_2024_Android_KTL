@@ -5,6 +5,7 @@ import com.ktl.bondoman.network.reponses.CheckTokenExpirationResponse
 import com.ktl.bondoman.network.reponses.LoginResponse
 import com.ktl.bondoman.network.requests.LoginRequest
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header

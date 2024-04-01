@@ -10,6 +10,7 @@ class NetworkReceiver() : BroadcastReceiver() {
 
     private var connected: Boolean = false
     private var initial: Boolean = true
+    private var listening : Boolean = false;
 
     companion object {
         private var instance: NetworkReceiver? = null
@@ -23,8 +24,16 @@ class NetworkReceiver() : BroadcastReceiver() {
             }
             return instance!!
         }
+
     }
 
+    fun setListening(bool: Boolean) {
+        this.listening = bool;
+    }
+
+    fun isListening(): Boolean {
+        return this.listening;
+    }
     fun isConnected(): Boolean {
         return this.connected
     }
@@ -51,7 +60,7 @@ class NetworkReceiver() : BroadcastReceiver() {
     fun isOnline(context: Context): Boolean {
         val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE)
                 as ConnectivityManager
-        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo // this returns a
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
 
         return networkInfo?.isConnected == true
     }
