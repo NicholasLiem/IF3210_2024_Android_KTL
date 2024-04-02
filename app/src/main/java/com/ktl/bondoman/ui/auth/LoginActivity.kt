@@ -59,8 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                delay(1000)
-
+                loadingButton.showLoadingWithDelay(true, 1000)
                 val response = ApiClient.apiService.login(LoginRequest(email, password))
                 if (response.isSuccessful && response.body() != null) {
                     val token = response.body()?.token

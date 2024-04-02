@@ -159,7 +159,7 @@ class TwibbonFragment : Fragment() {
         }
 
         captureButton.setOnClickListener {
-            captureLoadingButton.showLoading(true)
+            captureLoadingButton.showLoadingWithDelay(true, 500)
             takePhoto()
         }
 

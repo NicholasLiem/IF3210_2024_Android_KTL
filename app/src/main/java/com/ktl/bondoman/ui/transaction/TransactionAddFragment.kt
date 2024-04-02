@@ -1,5 +1,6 @@
 package com.ktl.bondoman.ui.transaction
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,14 +12,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.ktl.bondoman.R
 import com.ktl.bondoman.TransactionApplication
 import com.ktl.bondoman.db.Transaction
 import com.ktl.bondoman.token.TokenManager
+import com.ktl.bondoman.ui.components.LoadingButton
 import com.ktl.bondoman.utils.LocationUtils
 import com.ktl.bondoman.utils.PermissionUtils
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val ARG_ID = "id"
 private const val ARG_NIM = "nim"
@@ -52,6 +57,7 @@ class TransactionAddFragment : Fragment() {
     }
 
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,7 +70,9 @@ class TransactionAddFragment : Fragment() {
         val titleEditText = view.findViewById<TextView>(R.id.editTextTitle)
         val amountEditText = view.findViewById<TextView>(R.id.editTextAmount)
         val locationEditText = view.findViewById<TextView>(R.id.editTextLocation)
-        val submitButton = view.findViewById<Button>(R.id.buttonSubmit)
+        val loadingButtonTransactionSubmit = view.findViewById<LoadingButton>(R.id.loadingButtonSubmit)
+        loadingButtonTransactionSubmit.setButtonText("Submit")
+        val submitButton = loadingButtonTransactionSubmit.getButton()
         val cancelButton = view.findViewById<Button>(R.id.buttonCancel)
         val categoryRadioGroup = view.findViewById<RadioGroup>(R.id.radioGroupCategory)
 
@@ -95,6 +103,7 @@ class TransactionAddFragment : Fragment() {
         setCategory(category)
 
         submitButton.setOnClickListener {
+            loadingButtonTransactionSubmit.showLoadingWithDelay(true, 500)
             // Get input values
             val nim = nimEditText.text.toString()
             val title = titleEditText.text.toString()
@@ -105,7 +114,6 @@ class TransactionAddFragment : Fragment() {
                 R.id.radioButtonExpense -> "Expense"
                 else -> "" // Handle default case
             }
-
             if (validateForm(title, amount, category)) {
                 // Sets default value for location if not provided
                 if (location.isEmpty()) {
@@ -114,20 +122,19 @@ class TransactionAddFragment : Fragment() {
                 // Insert data into database
                 transactionViewModel.insert(
                     Transaction(id, nim, title, category, amount, location))
-
-                val currentActivity = requireActivity()
-
-                currentActivity.runOnUiThread {
-                    // Display toast
-                    Toast.makeText(
-                        currentActivity,
-                        "Transaction added successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                // Begin a fragment transaction
+                    val currentActivity = requireActivity()
+                 currentActivity.runOnUiThread {
+                     // Display toast
+                     Toast.makeText(
+                         currentActivity,
+                         "Transaction added successfully",
+                         Toast.LENGTH_SHORT
+                     ).show()
+                 }
+                    // Begin a fragment transaction
                 activity?.supportFragmentManager?.popBackStackImmediate()
+            } else {
+                loadingButtonTransactionSubmit.showLoadingWithDelay(false, 500)
             }
         }
 
