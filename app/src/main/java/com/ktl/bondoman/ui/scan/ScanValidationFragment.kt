@@ -1,4 +1,4 @@
-package com.ktl.bondoman.ui.twibbon
+package com.ktl.bondoman.ui.scan
 
 import NetworkReceiver
 import android.content.IntentFilter
@@ -39,7 +39,6 @@ data class Item (
 
 class ScanValidationFragment : Fragment() {
     private var img: String? = null
-    private var imgPath: String? = null
     private var isCam : Boolean = true
     private lateinit var tokenManager: TokenManager
     private lateinit var receiver: NetworkReceiver
@@ -67,25 +66,25 @@ class ScanValidationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_scan_validation, container, false)
-        val cancelButton: Button = view.findViewById<Button>(R.id.validationCancelButton)
-        val sendButton: Button = view.findViewById<Button>(R.id.validationSendButton)
-        val saveButton: Button = view.findViewById<Button>(R.id.validationSaveButton)
+        val cancelButton: Button = view.findViewById(R.id.validationCancelButton)
+        val sendButton: Button = view.findViewById(R.id.validationSendButton)
+        val saveButton: Button = view.findViewById(R.id.validationSaveButton)
         val contentView: TextView = view!!.findViewById(R.id.scanContent)
-        val scrollContentView: ScrollView = view!!.findViewById(R.id.scrollScanContent)
+        val scrollContentView: ScrollView = view.findViewById(R.id.scrollScanContent)
 
         cancelButton.setOnClickListener {
             activity?.supportFragmentManager?.popBackStackImmediate()
         }
 
         sendButton.setOnClickListener {
-            sendImage();
+            sendImage()
         }
 
         saveButton.setOnClickListener {
-            saveContent();
+            saveContent()
             activity?.supportFragmentManager?.popBackStackImmediate()
         }
 
@@ -97,7 +96,7 @@ class ScanValidationFragment : Fragment() {
         saveButton.visibility = View.GONE
         scrollContentView.visibility = View.GONE
 
-        return view;
+        return view
     }
 
     companion object {
@@ -130,18 +129,11 @@ class ScanValidationFragment : Fragment() {
             try {
                 val token = tokenManager.getTokenStr()
 
-                var resPath = ""
                 val dir = Environment.getExternalStorageDirectory()
                 val path = dir.absolutePath
 
-                resPath = img!!.substringAfter("/bondoman")
+                var resPath = img!!.substringAfter("/bondoman")
                 resPath = path + resPath
-
-
-//                requireActivity().runOnUiThread {
-//                    Log.d("HEHEEHE", resPath)
-//                }
-
 
                 val response = ApiClient.apiService.uploadBill("Bearer $token", BillUploadRequest(resPath).toMultipartBodyPart())
 
@@ -155,17 +147,17 @@ class ScanValidationFragment : Fragment() {
                     var lineData = "Index. Name : Final Price \n\n"
                     itemArrStr += lineData
 
-                    var count = 1;
+                    var count = 1
                     itemsList?.forEach{
-                        var name = it.name
-                        var qty = it.qty
-                        var price = it.price
-                        var final_price = qty * price;
+                        val name = it.name
+                        val qty = it.qty
+                        val price = it.price
+                        val finalPrice = qty * price
 
-                        Log.i("RESPONSE", "$name : $final_price")
-                        itemArr.add(Item(name, final_price))
+                        Log.i("RESPONSE", "$name : $finalPrice")
+                        itemArr.add(Item(name, finalPrice))
 
-                        lineData = "$count. $name : $final_price \n"
+                        lineData = "$count. $name : $finalPrice \n"
                         itemArrStr += lineData
                         lineData = "\t\t $qty @$price \n"
                         itemArrStr += lineData
@@ -184,14 +176,14 @@ class ScanValidationFragment : Fragment() {
                     Toast.makeText(requireContext(), "Not Successful. Response Code: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                    Log.d("ERROR", "${e.localizedMessage}")
+                e.localizedMessage?.let { Log.d("ERROR", it) }
                     Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
     private fun changeState(){
-        val title: TextView = view!!.findViewById<TextView>(R.id.scanResultTitle)
+        val title: TextView = view!!.findViewById(R.id.scanResultTitle)
         val imageView: ImageView = view!!.findViewById(R.id.scanResultImage)
         val contentView: TextView = view!!.findViewById(R.id.scanContent)
         val scrollContentView : ScrollView = view!!.findViewById(R.id.scrollScanContent)

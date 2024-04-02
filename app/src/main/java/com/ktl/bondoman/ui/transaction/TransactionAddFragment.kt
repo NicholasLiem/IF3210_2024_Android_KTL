@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.ktl.bondoman.R
@@ -22,8 +21,6 @@ import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.components.LoadingButton
 import com.ktl.bondoman.utils.LocationUtils
 import com.ktl.bondoman.utils.PermissionUtils
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 private const val ARG_ID = "id"
 private const val ARG_NIM = "nim"
