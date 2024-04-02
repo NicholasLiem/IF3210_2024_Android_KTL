@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ktl.bondoman.R
 import com.ktl.bondoman.TransactionApplication
+import com.ktl.bondoman.token.TokenManager
 
 
 class TransactionListFragment : Fragment() {
@@ -36,13 +37,19 @@ class TransactionListFragment : Fragment() {
         activity.supportActionBar?.title = "Transactions"
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = TransactionAdapter()
+
+        val tokenManager = TokenManager(requireContext())
+        val nim = tokenManager.loadToken()?.nim
+
+        val adapter = TransactionAdapter(nim!!)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
 
         transactionViewModel.allTransactions.observe(this) { transactions ->
-            transactions.let { adapter.submitList(it) }
+            transactions.let {
+                adapter.submitList(it)
+            }
         }
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)

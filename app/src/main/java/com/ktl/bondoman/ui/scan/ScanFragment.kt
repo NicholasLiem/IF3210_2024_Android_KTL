@@ -29,6 +29,8 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.ktl.bondoman.databinding.FragmentScanBinding
 import com.ktl.bondoman.utils.NetworkReceiver
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -41,10 +43,13 @@ import java.util.Locale
 private const val TAG = "cameraX"
 private const val REQUEST_CODE = 123
 private const val IMAGE_REQUEST_CODE = 100
-private val REQUIRED_PERMISSIONS = arrayOf(
+private val REQUIRED_PERMISSIONS_STORAGE = arrayOf(
     Manifest.permission.READ_EXTERNAL_STORAGE,
     Manifest.permission.WRITE_EXTERNAL_STORAGE
 )
+private const val targetSize : Long = 100 * 1024
+
+private val REQUIRED_PERMISSIONS_CAMERA = arrayOf(Manifest.permission.CAMERA)
 
 class ScanFragment : Fragment() {
     private lateinit var viewBinding: FragmentScanBinding
@@ -67,7 +72,8 @@ class ScanFragment : Fragment() {
             viewBinding.noInternetLayout.visibility = View.GONE
             viewBinding.scanLayout.visibility = View.VISIBLE
             if (!checkPermissions()) {
-                requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE)
+                requestPermissions(REQUIRED_PERMISSIONS_STORAGE, REQUEST_CODE)
+                requestPermissions(REQUIRED_PERMISSIONS_CAMERA, REQUEST_CODE)
             } else {
                 startCamera()
             }
@@ -112,8 +118,11 @@ class ScanFragment : Fragment() {
                     val bitmap = imageProxyToBitmap(image)
                     image.close()
 
+                    val quality: Int = 10
+                    val compressedBitmap = compressBitmap(bitmap!!, targetSize, quality)
+
                     val tempFile = createTempFile()
-                    saveBitmapToFile(bitmap, tempFile)
+                    saveBitmapToFile(compressedBitmap, tempFile)
 
                     val savedUri = FileProvider.getUriForFile(
                         requireContext(),
@@ -130,6 +139,25 @@ class ScanFragment : Fragment() {
 
             }
         )
+    }
+
+    fun compressBitmap(bitmap: Bitmap, maxFileSize: Long, quality: Int): Bitmap {
+        val outputStream = ByteArrayOutputStream()
+        var scaledBitmap = bitmap
+//        var bytes = outputStream.toByteArray()
+//        var tempQuality = quality
+//        do {
+//            outputStream.reset()
+//            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, tempQuality, outputStream)
+//            bytes = outputStream.toByteArray()
+//            scaledBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//            tempQuality -= 10
+//        } while (bytes.size > maxFileSize && tempQuality > 0)
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+        scaledBitmap = BitmapFactory.decodeStream(ByteArrayInputStream(outputStream.toByteArray()))
+
+        return scaledBitmap
     }
 
     private fun pickImageFromGallery(){
@@ -162,8 +190,11 @@ class ScanFragment : Fragment() {
             data?.data?.let { uri ->
                 val bitmap : Bitmap? = getBitmapFromUri(requireContext(), uri)
 
+                val quality: Int = 10
+                val compressedBitmap = compressBitmap(bitmap!!, targetSize, quality)
+
                 val tempFile = createTempFile()
-                saveBitmapToFile(bitmap, tempFile)
+                saveBitmapToFile(compressedBitmap, tempFile)
 
                 val savedUri = FileProvider.getUriForFile(
                     requireContext(),
@@ -181,7 +212,10 @@ class ScanFragment : Fragment() {
     }
 
     fun checkPermissions() : Boolean{
-        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        val cameraPermissions = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        val writePermissions = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        val readPermissions = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        return cameraPermissions && writePermissions && readPermissions
     }
 
     @Deprecated("Deprecated in Java")
@@ -231,10 +265,11 @@ class ScanFragment : Fragment() {
     }
 
     private fun createTempFile(): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis())
+//        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis())
         val storageDir: File = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
         return File.createTempFile(
-            "JPEG_${timeStamp}_",
+            "JPEG_temp_",
+//            "JPEG_${timeStamp}_",
             ".jpg",
             storageDir
         ).apply {
@@ -273,7 +308,8 @@ class ScanFragment : Fragment() {
                 fragment.viewBinding.noInternetLayout.visibility = View.GONE
                 fragment.viewBinding.scanLayout.visibility = View.VISIBLE
                 if (!fragment.checkPermissions()) {
-                    fragment.requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE)
+                    fragment.requestPermissions(REQUIRED_PERMISSIONS_CAMERA, REQUEST_CODE)
+                    fragment.requestPermissions(REQUIRED_PERMISSIONS_STORAGE, REQUEST_CODE)
                 } else {
                     fragment.startCamera()
                 }

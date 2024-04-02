@@ -156,13 +156,13 @@
                 android:layout_marginRight="10dp"
                 android:text="Cancel" />
 
-            <Button
-                android:id="@+id/buttonSubmit"
+            <com.ktl.bondoman.ui.components.LoadingButton
+                android:id="@+id/loadingButtonSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:text="Submit" />
+                android:layout_marginLeft="10dp"/>
+
         </LinearLayout>
 
         <!-- Submit Button -->

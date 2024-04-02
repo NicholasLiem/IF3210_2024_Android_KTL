@@ -1,6 +1,7 @@
 package com.ktl.bondoman.ui.transaction
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +12,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ktl.bondoman.R
 import com.ktl.bondoman.db.Transaction
+import com.ktl.bondoman.token.TokenManager
 
-class TransactionAdapter : ListAdapter<Transaction, TransactionViewHolder>(TransactionsComparator()) {
+class TransactionAdapter (private val nim : String) : ListAdapter<Transaction, TransactionViewHolder>(TransactionsComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
-        return TransactionViewHolder.create(parent)
+        return TransactionViewHolder.create(parent, nim)
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
@@ -42,7 +44,7 @@ class TransactionAdapter : ListAdapter<Transaction, TransactionViewHolder>(Trans
     }
 }
 
-class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TransactionViewHolder(itemView: View, private val nim: String) : RecyclerView.ViewHolder(itemView) {
     private val titleView: TextView = itemView.findViewById(R.id.titleView)
     private val dateView: TextView = itemView.findViewById(R.id.dateView)
     private val amountView: TextView = itemView.findViewById(R.id.amountView)
@@ -58,10 +60,24 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     fun bind(current: Transaction, editClickListener: ((Transaction) -> Unit)?, deleteClickListener: ((Transaction) -> Unit)?, itemClickListener: ((Transaction) -> Unit)?) {
         titleView.text = current.title
         dateView.text = Transaction.getDateString(current.date)
-        amountView.text = "Amount: Rp" + current.amount.toString()
-        locationView.text = "Location: " + current.location
-        categoryView.text = "Category: " + current.category
+        amountView.text = "Amount: \nRp " + "%,.3f".format(current.amount)
+        locationView.text = "Location: \n" + current.location
+        categoryView.text =  current.category
+        if (current.category == "Income"){
+            categoryView.setTextColor(Color.parseColor("#B54B88F1"))
+        } else {
+            categoryView.setTextColor(Color.parseColor("#DCED4E4E"))
+        }
         nimView.text = "by " + current.nim
+
+        if (nim != current.nim){
+            buttonEdit.visibility = View.GONE
+            buttonDelete.visibility = View.GONE
+        } else {
+            buttonEdit.visibility = View.VISIBLE
+            buttonDelete.visibility = View.VISIBLE
+        }
+
         buttonEdit.setOnClickListener {
             editClickListener?.invoke(current)
         }
@@ -76,10 +92,10 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     }
 
     companion object {
-        fun create(parent: ViewGroup): TransactionViewHolder {
+        fun create(parent: ViewGroup, nim : String): TransactionViewHolder {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recyclerview_item, parent, false)
-            return TransactionViewHolder(view)
+            return TransactionViewHolder(view, nim)
         }
     }
 }
