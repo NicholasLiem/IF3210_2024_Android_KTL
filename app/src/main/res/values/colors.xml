@@ -18,4 +18,25 @@
     <color name="cmp_gray">#425056</color>
     <color name="header_background">#425056</color>
     <color name="white">#FFFFFF</color>
+    <!-- New Color Palette -->
+    <!-- Primary Color -->
+    <color name="brownPrimary">#6E5555</color>
+    <color name="whitePrimary">#F5F5F5</color>
+
+    <!-- Complementary Color (For contrast & accents) -->
+    <color name="complementaryBlue">#557E6E</color>
+
+    <!-- Accent Colors -->
+    <color name="accentYellow">#FFC107</color> <!-- Bright & noticeable -->
+    <color name="accentLightBrown">#9E7867</color> <!-- Softer, for less emphasis -->
+
+    <!-- Background Colors -->
+    <color name="backgroundLight">#FFFFFF</color> <!-- Light theme background -->
+    <color name="backgroundDark">#121212</color> <!-- Dark theme background -->
+
+    <!-- Text Colors -->
+    <color name="textPrimaryLight">#DE000000</color> <!-- Primary text on light bg -->
+    <color name="textSecondaryLight">#89000000</color> <!-- Secondary text on light bg -->
+    <color name="textPrimaryDark">#FFFFFFFF</color> <!-- Primary text on dark bg -->
+    <color name="textSecondaryDark">#B3FFFFFF</color> <!-- Secondary text on dark bg -->
 </resources>
