@@ -50,6 +50,7 @@
         android:elevation="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:paddingTop="8dp"
         app:itemBackground="@drawable/nav_item_background_selector"
         app:itemIconTint="@drawable/nav_icon_selector"
         app:itemTextColor="@drawable/nav_icon_selector"
