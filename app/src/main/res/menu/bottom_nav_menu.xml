@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/navigation_transaction_list"
         android:icon="@drawable/transaction_list_icon"
@@ -9,7 +8,7 @@
     <item
         android:id="@+id/navigation_graph"
         android:icon="@drawable/pie_chart_icon"
-        android:title="Graph" />
+        android:title="@string/title_graph" />
 
     <item
         android:id="@+id/navigation_scan"
@@ -19,12 +18,10 @@
     <item
         android:id="@+id/navigation_twibbon"
         android:icon="@drawable/twibbon_icon"
-        android:title="Twibbon" />
+        android:title="@string/title_twibbon" />
 
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/settings_icon"
         android:title="@string/title_settings" />
-
-
 </menu>
