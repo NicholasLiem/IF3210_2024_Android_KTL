@@ -36,7 +36,7 @@ data class Transaction(
         @JvmStatic
         @TypeConverter
         fun getDateString(millis: Long): String {
-            val formatter = SimpleDateFormat("EEEE, d MMMM yyyy, HH:mm", Locale.getDefault())
+            val formatter = SimpleDateFormat("EEE, d MMMM yyyy, HH:mm", Locale.getDefault())
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = millis
             return formatter.format(calendar.time)
