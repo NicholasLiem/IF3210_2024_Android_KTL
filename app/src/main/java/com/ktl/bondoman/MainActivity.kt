@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
@@ -83,6 +85,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupUIComponents() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        window.setBackgroundDrawable(ColorDrawable(Color.parseColor("#F5F5F5")))
 
         val sideNavView = findViewById<NavigationView>(R.id.side_navigation_menu)
         val navView = findViewById<BottomNavigationView>(R.id.navigation_menu)

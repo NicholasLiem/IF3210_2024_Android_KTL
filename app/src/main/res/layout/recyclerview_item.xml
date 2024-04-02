@@ -44,7 +44,6 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="14sp"
-            android:textStyle="bold"
             android:text="NIM"
             android:padding="4dp" />
 

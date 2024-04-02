@@ -35,9 +35,13 @@
             android:id="@+id/fab"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:elevation="4dp"
+            app:pressedTranslationZ="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:padding="16dp"
+            android:backgroundTint="#E0E0E0"
             android:src="@drawable/add_icon"
             android:contentDescription="Add word"/>
 

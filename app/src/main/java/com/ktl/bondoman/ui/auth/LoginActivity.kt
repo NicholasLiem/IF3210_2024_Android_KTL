@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
                 }
             } finally {
-                loadingButton.showLoading(false)
+                loadingButton.showLoadingWithDelay(false, 0)
             }
         }
     }

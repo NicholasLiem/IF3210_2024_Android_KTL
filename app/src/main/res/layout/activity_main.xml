@@ -24,10 +24,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/brownPrimary"
+        android:background="@drawable/toolbar_bg"
         app:titleTextColor="@color/bondo_white"
         app:layout_constraintTop_toTopOf="parent"
         app:title=""
+        android:elevation="16dp"
         tools:layout_editor_absoluteX="0dp" />
 
     <androidx.fragment.app.FragmentContainerView
