@@ -46,7 +46,6 @@ repositories {
 dependencies {
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.5.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
@@ -80,7 +79,6 @@ dependencies {
     kapt("androidx.room:room-compiler:2.4.3")
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
-    implementation("com.google.android.material:material:1.4.0")
 
     implementation("org.apache.poi:poi:5.2.4")
     implementation("org.apache.poi:poi-ooxml:5.2.4")
