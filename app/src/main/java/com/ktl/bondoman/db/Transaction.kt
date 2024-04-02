@@ -21,7 +21,7 @@ data class Transaction(
     val title: String,
 
     @ColumnInfo(name = "category")
-    val category: String, // "Pemasukan" or "Pengeluaran"
+    val category: String, // "Income" or "Expense"
 
     @ColumnInfo(name = "amount")
     val amount: Double,
