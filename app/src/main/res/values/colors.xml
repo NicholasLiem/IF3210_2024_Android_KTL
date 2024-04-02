@@ -39,4 +39,7 @@
     <color name="textSecondaryLight">#89000000</color> <!-- Secondary text on light bg -->
     <color name="textPrimaryDark">#FFFFFFFF</color> <!-- Primary text on dark bg -->
     <color name="textSecondaryDark">#B3FFFFFF</color> <!-- Secondary text on dark bg -->
+
+    <!-- Custom -->
+    <color name="cardBackground">#F0E8E0</color>
 </resources>
