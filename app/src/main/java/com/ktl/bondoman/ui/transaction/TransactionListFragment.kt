@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -42,9 +41,9 @@ class TransactionListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
 
-        transactionViewModel.allTransactions.observe(this, Observer { transactions ->
+        transactionViewModel.allTransactions.observe(this) { transactions ->
             transactions.let { adapter.submitList(it) }
-        })
+        }
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {

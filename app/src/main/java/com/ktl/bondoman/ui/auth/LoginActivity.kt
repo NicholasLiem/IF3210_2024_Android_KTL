@@ -1,6 +1,5 @@
 package com.ktl.bondoman.ui.auth
 
-import NetworkReceiver
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
@@ -16,6 +15,7 @@ import com.ktl.bondoman.network.ApiClient
 import com.ktl.bondoman.network.requests.LoginRequest
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.components.LoadingButton
+import com.ktl.bondoman.utils.NetworkReceiver
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {

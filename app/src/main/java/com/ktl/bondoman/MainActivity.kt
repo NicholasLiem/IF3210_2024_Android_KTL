@@ -1,6 +1,5 @@
 package com.ktl.bondoman
 
-import NetworkReceiver
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -21,6 +20,7 @@ import com.ktl.bondoman.token.Token
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.auth.LoginActivity
 import com.ktl.bondoman.ui.transaction.TransactionAddFragment
+import com.ktl.bondoman.utils.NetworkReceiver
 import com.ktl.bondoman.utils.PermissionUtils
 
 

@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 object PermissionUtils {
-    public val LOCATION_PERMISSION_REQUEST_CODE = 1
+    const val LOCATION_PERMISSION_REQUEST_CODE = 1
 
     fun requestLocationPermissions(activity: Fragment, requestCode: Int) {
         val context = activity.context ?: return

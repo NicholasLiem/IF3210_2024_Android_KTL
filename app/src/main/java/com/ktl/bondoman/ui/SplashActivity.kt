@@ -13,15 +13,15 @@ import com.ktl.bondoman.R
 @SuppressLint("CustomSplashScreen")
 @Suppress("DEPRECATION")
 class SplashActivity : AppCompatActivity() {
-    lateinit var progressBar : ProgressBar
+    private lateinit var progressBar : ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         progressBar = findViewById(R.id.progressBar)
 
-        progressBar.max = 1000;
-        val curProgress = 1000;
+        progressBar.max = 1000
+        val curProgress = 1000
 
         ObjectAnimator.ofInt(progressBar, "progress", curProgress)
             .setDuration(1000)

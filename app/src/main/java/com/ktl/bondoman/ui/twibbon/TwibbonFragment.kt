@@ -1,8 +1,6 @@
 package com.ktl.bondoman.ui.twibbon
 
-import NetworkReceiver
 import android.Manifest
-import android.content.BroadcastReceiver
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -36,19 +34,13 @@ import java.util.Locale
 
 
 private const val TAG = "cameraX"
-private const val FILE_NAME_FORMAT = "yy-MM-dd-HH-mm-ss-SSS"
 private const val REQUEST_CODE = 123
 private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
 class TwibbonFragment : Fragment() {
     private lateinit var viewBinding: FragmentTwibbonBinding
-    private lateinit var connectivityChangeReceiver: BroadcastReceiver
     private var imageCapture : ImageCapture? = null
-    private var currentTwibbon : String = "twibbon1";
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var currentTwibbon : String = "twibbon1"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,8 +48,6 @@ class TwibbonFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         viewBinding = FragmentTwibbonBinding.inflate(inflater, container, false)
-        val networkReceiver = NetworkReceiver.getInstance()
-
         if (!checkPermissions()) {
             requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE)
         } else {
@@ -68,10 +58,11 @@ class TwibbonFragment : Fragment() {
     }
 
 
-    fun checkPermissions() : Boolean{
-        return ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+    private fun checkPermissions() : Boolean{
+        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -87,7 +78,7 @@ class TwibbonFragment : Fragment() {
         }
     }
 
-    fun startCamera(){
+    private fun startCamera(){
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
@@ -139,23 +130,23 @@ class TwibbonFragment : Fragment() {
         // When button is clicked
         twibbon1.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon1)
-            currentTwibbon = "twibbon1";
+            currentTwibbon = "twibbon1"
         }
         twibbon2.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon2)
-            currentTwibbon = "twibbon2";
+            currentTwibbon = "twibbon2"
         }
         twibbon3.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon3)
-            currentTwibbon = "twibbon3";
+            currentTwibbon = "twibbon3"
         }
         twibbon4.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon4)
-            currentTwibbon = "twibbon4";
+            currentTwibbon = "twibbon4"
         }
         twibbon5.setOnClickListener {
             overlay.setImageResource(R.drawable.twibbon5)
-            currentTwibbon = "twibbon5";
+            currentTwibbon = "twibbon5"
         }
 
         captureButton.setOnClickListener {
@@ -207,9 +198,9 @@ class TwibbonFragment : Fragment() {
                         tempFile
                     )
 
-                    val validationFrag = TwibbonValidationFragment.newInstance(currentTwibbon, savedUri.toString());
-                    getActivity()?.supportFragmentManager?.beginTransaction()
-                        ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
+                    val validationFrag = TwibbonValidationFragment.newInstance(currentTwibbon, savedUri.toString())
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.nav_host_fragment, validationFrag)
                         ?.addToBackStack(null)
                         ?.commit()
                 }
@@ -228,10 +219,6 @@ class TwibbonFragment : Fragment() {
         ).apply {
             deleteOnExit()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
 }

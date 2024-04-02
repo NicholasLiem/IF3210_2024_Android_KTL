@@ -1,3 +1,5 @@
+package com.ktl.bondoman.utils
+
 import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,11 +8,11 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 
 
-class NetworkReceiver() : BroadcastReceiver() {
+class NetworkReceiver : BroadcastReceiver() {
 
     private var connected: Boolean = false
     private var initial: Boolean = true
-    private var listening : Boolean = false;
+    private var listening : Boolean = false
 
     companion object {
         private var instance: NetworkReceiver? = null
@@ -28,11 +30,11 @@ class NetworkReceiver() : BroadcastReceiver() {
     }
 
     fun setListening(bool: Boolean) {
-        this.listening = bool;
+        this.listening = bool
     }
 
     fun isListening(): Boolean {
-        return this.listening;
+        return this.listening
     }
     fun isConnected(): Boolean {
         return this.connected
@@ -57,7 +59,7 @@ class NetworkReceiver() : BroadcastReceiver() {
         context.sendBroadcast(connectivityIntent)
     }
 
-    fun isOnline(context: Context): Boolean {
+    private fun isOnline(context: Context): Boolean {
         val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE)
                 as ConnectivityManager
         val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo

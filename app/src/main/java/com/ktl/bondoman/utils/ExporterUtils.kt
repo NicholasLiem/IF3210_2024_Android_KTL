@@ -23,9 +23,9 @@ object ExporterUtils {
     suspend fun exportTransactions(context: Context, transactionDao: TransactionDao, fileType: String, email : Boolean = false) {
         Log.w("ExporterUtils", "Exporting transactions")
 
-        val transactions = transactionDao.getAllList();
+        val transactions = transactionDao.getAllList()
 
-        Log.w("ExporterUtils", "Checkpoint 2 Exporting transactions value ${transactions}")
+        Log.w("ExporterUtils", "Checkpoint 2 Exporting transactions value $transactions")
             val wb: Workbook = if (fileType == "xlsx") XSSFWorkbook() else HSSFWorkbook()
             val sheet: Sheet = wb.createSheet("Transaction Data")
 
@@ -57,7 +57,7 @@ object ExporterUtils {
             // Write the workbook to a file
             try {
                     Log.w("ExporterUtils", "Exporting transactions download")
-                    val fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
+                    val fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
                     val dateTimeString = System.currentTimeMillis()
                     val file = File(fileDir, "transaction_data_${dateTimeString}.${if (fileType == "xlsx") "xlsx" else "xls"}")
                     val fos = FileOutputStream(file)
@@ -73,12 +73,11 @@ object ExporterUtils {
         }
 private fun shareFileByEmail(context: Context, contentUri: Uri) {
     try {
-        val uri = contentUri
-        Log.w("EMAIL", "URI: $uri")
+        Log.w("EMAIL", "URI: $contentUri")
         val emailIntent = Intent(Intent.ACTION_SEND)
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Transaction Data")
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Please find attached the transaction data file.")
-        emailIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        emailIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         emailIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         emailIntent.type = "application/vnd.ms-excel"

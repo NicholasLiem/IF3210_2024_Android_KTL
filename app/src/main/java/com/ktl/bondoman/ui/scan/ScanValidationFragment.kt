@@ -1,6 +1,5 @@
 package com.ktl.bondoman.ui.scan
 
-import NetworkReceiver
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -27,6 +26,7 @@ import com.ktl.bondoman.network.requests.BillUploadRequest
 import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.transaction.TransactionViewModel
 import com.ktl.bondoman.ui.transaction.TransactionViewModelFactory
+import com.ktl.bondoman.utils.NetworkReceiver
 import kotlinx.coroutines.launch
 
 private const val ARG_IMG = "image"

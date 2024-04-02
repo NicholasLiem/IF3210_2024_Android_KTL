@@ -1,7 +1,7 @@
 package com.ktl.bondoman.ui.scan
 
-import NetworkReceiver
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.ktl.bondoman.databinding.FragmentScanBinding
+import com.ktl.bondoman.utils.NetworkReceiver
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -36,7 +37,6 @@ import java.io.InputStream
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.concurrent.ExecutorService
 
 private const val TAG = "cameraX"
 private const val REQUEST_CODE = 123
@@ -50,11 +50,6 @@ class ScanFragment : Fragment() {
     private lateinit var viewBinding: FragmentScanBinding
     private var imageCapture : ImageCapture? = null
     private lateinit var connectivityChangeReceiver: BroadcastReceiver
-    private lateinit var cameraExecutor: ExecutorService
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -126,8 +121,8 @@ class ScanFragment : Fragment() {
                         tempFile
                     )
 
-                    val validationFrag = ScanValidationFragment.newInstance(savedUri.toString(),true);
-                    getActivity()?.supportFragmentManager?.beginTransaction()
+                    val validationFrag = ScanValidationFragment.newInstance(savedUri.toString(),true)
+                    activity?.supportFragmentManager?.beginTransaction()
                         ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
                         ?.addToBackStack(null)
                         ?.commit()
@@ -137,13 +132,13 @@ class ScanFragment : Fragment() {
         )
     }
 
-    fun pickImageFromGallery(){
+    private fun pickImageFromGallery(){
         val intent = Intent(Intent.ACTION_PICK)
         intent.type="image/*"
         startActivityForResult(intent, IMAGE_REQUEST_CODE )
     }
 
-    fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+    private fun getBitmapFromUri(context: Context, uri: Uri): Bitmap? {
         var inputStream: InputStream? = null
         try {
             inputStream = context.contentResolver.openInputStream(uri)
@@ -160,6 +155,7 @@ class ScanFragment : Fragment() {
         return null
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK){
@@ -175,8 +171,8 @@ class ScanFragment : Fragment() {
                     tempFile
                 )
 
-                val validationFrag = ScanValidationFragment.newInstance(savedUri.toString(),false);
-                getActivity()?.supportFragmentManager?.beginTransaction()
+                val validationFrag = ScanValidationFragment.newInstance(savedUri.toString(),false)
+                activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(com.ktl.bondoman.R.id.nav_host_fragment, validationFrag)
                     ?.addToBackStack(null)
                     ?.commit()
@@ -185,9 +181,10 @@ class ScanFragment : Fragment() {
     }
 
     fun checkPermissions() : Boolean{
-        return ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -252,10 +249,7 @@ class ScanFragment : Fragment() {
         activity.supportActionBar?.title = "Scan"
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onStart() {
         super.onStart()
         requireContext().registerReceiver(
