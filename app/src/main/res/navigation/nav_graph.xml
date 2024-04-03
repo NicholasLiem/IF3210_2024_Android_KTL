@@ -10,24 +10,50 @@
         android:name="com.ktl.bondoman.ui.graph.GraphFragment"
         android:label="fragment_graph"
         tools:layout="@layout/fragment_graph" />
+
     <fragment
         android:id="@+id/navigation_scan"
         android:name="com.ktl.bondoman.ui.scan.ScanFragment"
         android:label="fragment_scan"
         tools:layout="@layout/fragment_scan" />
+
+    <fragment
+        android:id="@+id/navigation_scan_validation"
+        android:name="com.ktl.bondoman.ui.scan.ScanValidationFragment"
+        android:label="fragment_scan_validation"
+        tools:layout="@layout/fragment_scan_validation" />
+
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.ktl.bondoman.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+
     <fragment
         android:id="@+id/navigation_transaction_list"
         android:name="com.ktl.bondoman.ui.transaction.TransactionListFragment"
         android:label="fragment_transaction_list"
         tools:layout="@layout/fragment_transaction_list" />
+
+    <fragment
+        android:id="@+id/navigation_transaction_add"
+        android:name="com.ktl.bondoman.ui.transaction.TransactionAddFragment"
+        android:label="fragment_transaction_add"
+        tools:layout="@layout/fragment_transaction_add" />
+
     <fragment
         android:id="@+id/navigation_twibbon"
         android:name="com.ktl.bondoman.ui.twibbon.TwibbonFragment"
-        android:label="twibbon_settings"
+        android:label="fragment_twibbon"
         tools:layout="@layout/fragment_twibbon" />
+
+    <fragment
+        android:id="@+id/navigation_twibbon_validation"
+        android:name="com.ktl.bondoman.ui.twibbon.TwibbonValidationFragment"
+        android:label="fragment_twibbon_validation"
+        tools:layout="@layout/fragment_twibbon_validation" />
+
+
+
+
 </navigation>

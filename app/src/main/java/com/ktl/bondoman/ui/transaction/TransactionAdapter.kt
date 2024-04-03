@@ -60,7 +60,7 @@ class TransactionViewHolder(itemView: View, private val nim: String) : RecyclerV
     fun bind(current: Transaction, editClickListener: ((Transaction) -> Unit)?, deleteClickListener: ((Transaction) -> Unit)?, itemClickListener: ((Transaction) -> Unit)?) {
         titleView.text = current.title
         dateView.text = Transaction.getDateString(current.date)
-        amountView.text = "Amount: \nRp " + "%,.3f".format(current.amount)
+        amountView.text = "Amount: \n$ " + "%,.3f".format(current.amount)
         locationView.text = "Location: \n" + current.location
         categoryView.text =  current.category
         if (current.category == "Income"){

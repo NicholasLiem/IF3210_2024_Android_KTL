@@ -23,7 +23,7 @@ class TwibbonValidationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseArguments()
-
+//        activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     }
 
     override fun onCreateView(
@@ -34,8 +34,8 @@ class TwibbonValidationFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_twibbon_validation, container, false)
         val cancelButton: Button = view.findViewById(R.id.retakeButton)
         cancelButton.setOnClickListener {
-            activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR)
             activity?.supportFragmentManager?.popBackStackImmediate()
+            activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         }
 
         val overlay: ImageView = view.findViewById(R.id.twibbonOverlayValidation)
@@ -78,6 +78,7 @@ class TwibbonValidationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = "Twibbon Validation"
     }
