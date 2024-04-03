@@ -75,6 +75,33 @@ The BondoMan app is an Android application for financial tracking, made using ko
 ![img/img_8.png](img/img_8.png)
 ![img/img_7.png](img/img_7.png)
 
+## OWASP Analysis
+Ada tiga kerentanan yang akan dianalisis yakni M4, M8, dan M9 (2024). Masing-masing kerentanan tersebut adalah M4: Insufficient Input/Output Validation, M8: Security Misconfig, dan M9: Insecure Data Storage
+
+1. M4: Insufficient Input/Output Validation
+Biasanya hal ini terjadi karena validasi dan sanitasi data dari pengguna yang tidak tepat sehingga dapat menimbulkan serangan seperti SQL Injection, Command Injection ataupun Cross-Site Scripting (XSS) attack.
+
+Analisis dan Perbaikan
+
+2. M8: Security Misconfiguration
+Beberapa eksploit yang biasa digunakan untuk masalah M8 adalah sebagai berikut:
+* Unnecessary permissions enabled
+* Weak encryption or hashing
+* Lack of secure communication
+* Unprotected storage
+* Insecure file permissions
+* Improper session management
+
+Analisis dan Perbaikan
+
+3. M9: Insecure Data Storage
+Biasanya kerentanan ini dapat dieskploit dengan adanya akses kontrol yang tidak baik sehingga orang lain atau agen dapat mengakses informasi sensitif. Eksploit yang digunakan adalah:
+* Enkripsi yang lemah
+* Tidak ada proteksi data storage (persistent)
+* Handling user credentials yang tidak benar
+
+Analisis dan Perbaikan
+
 ## 🖥️ **Workload Distribution and Contributors**
 | Name                     | Student ID | Functionality | Work Duration |
 |--------------------------|------------|---------------|-------|
