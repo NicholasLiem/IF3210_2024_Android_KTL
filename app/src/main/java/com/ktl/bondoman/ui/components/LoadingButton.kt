@@ -47,6 +47,10 @@ class LoadingButton(context: Context, attrs: AttributeSet) : FrameLayout(context
         return button
     }
 
+    fun setButtonVisible(visible: Boolean) {
+        button.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         job?.cancel()
