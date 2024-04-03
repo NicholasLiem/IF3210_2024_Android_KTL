@@ -11,8 +11,8 @@ import android.net.NetworkInfo
 class NetworkReceiver : BroadcastReceiver() {
 
     private var connected: Boolean = false
-    private var initial: Boolean = true
     private var listening : Boolean = false
+    private var show : Boolean = false
 
     companion object {
         private var instance: NetworkReceiver? = null
@@ -39,15 +39,17 @@ class NetworkReceiver : BroadcastReceiver() {
     fun isConnected(): Boolean {
         return this.connected
     }
+    fun setShow(bool: Boolean) {
+        this.show = bool
+    }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val dialogBuilder = AlertDialog.Builder(context)
         this.connected = isOnline(context!!)
         val message = if (this.connected) "You are now online!" else "Your device is now offline, some features may not work!"
 
-        dialogBuilder.setMessage(message)
-
-        if (!this.initial) {
+        if (show) {
+            dialogBuilder.setMessage(message)
             val alertDialog = dialogBuilder.create()
             alertDialog.show()
         }

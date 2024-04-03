@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         setupNetworkReceiver()
         setupUIComponents()
 
+
         val token = tokenManager.loadToken()
         if (token == null || isTokenExpired(token)) {
             navigateToLogin()
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         if (isNetworkReceiverRegistered && receiver.isListening()) {
-            applicationContext.unregisterReceiver(receiver)
+            this.unregisterReceiver(receiver)
             isNetworkReceiverRegistered = false
             receiver.setListening(false)
         }
@@ -145,9 +146,10 @@ class MainActivity : AppCompatActivity() {
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         receiver = NetworkReceiver.getInstance()
         if (!isNetworkReceiverRegistered){
-            applicationContext.registerReceiver(receiver, filter)
+            this.registerReceiver(receiver, filter)
             isNetworkReceiverRegistered = true
             receiver.setListening(true);
+            receiver.setShow(true);
         }
     }
 
