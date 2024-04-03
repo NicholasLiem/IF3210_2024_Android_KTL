@@ -43,6 +43,7 @@ class ScanValidationFragment : Fragment() {
     private var isCam : Boolean = true
     private lateinit var tokenManager: TokenManager
     private lateinit var receiver: NetworkReceiver
+    private lateinit var loadingButtonSend: LoadingButton
     private var itemArr = mutableListOf<Item>()
     private var itemArrStr : String = ""
     private val transactionViewModel: TransactionViewModel by viewModels {
@@ -71,7 +72,9 @@ class ScanValidationFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_scan_validation, container, false)
         val cancelButton: Button = view.findViewById(R.id.validationCancelButton)
-        val sendButton: Button = view.findViewById(R.id.validationSendButton)
+        loadingButtonSend = view.findViewById(R.id.loadingButtonSend)
+        loadingButtonSend.setButtonText("Send")
+        val sendButton: Button = loadingButtonSend.getButton()
         val saveButton: Button = view.findViewById(R.id.validationSaveButton)
         val contentView: TextView = view!!.findViewById(R.id.scanContent)
         val scrollContentView: ScrollView = view.findViewById(R.id.scrollScanContent)
@@ -126,8 +129,10 @@ class ScanValidationFragment : Fragment() {
             Toast.makeText(requireContext(), "No internet connection, cannot send data!", Toast.LENGTH_SHORT).show()
             return
         }
+
         lifecycleScope.launch {
             try {
+                loadingButtonSend.showLoadingWithDelay(true)
                 val token = tokenManager.getTokenStr()
 
                 val dir = Environment.getExternalStorageDirectory()
@@ -173,24 +178,29 @@ class ScanValidationFragment : Fragment() {
                     }
 
                 } else {
+                    loadingButtonSend.showLoadingWithDelay(false)
                     Log.d("ERROR", "${response.raw()}")
                     Toast.makeText(requireContext(), "Not Successful. Response Code: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
+                loadingButtonSend.showLoadingWithDelay(false)
                 e.localizedMessage?.let { Log.d("ERROR", it) }
                     Toast.makeText(requireContext(), "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
-                }
             }
         }
+    }
 
     private fun changeState(){
+        loadingButtonSend.showLoading(false)
         val title: TextView = view!!.findViewById(R.id.scanResultTitle)
         val imageView: ImageView = view!!.findViewById(R.id.scanResultImage)
         val contentView: TextView = view!!.findViewById(R.id.scanContent)
         val scrollContentView : ScrollView = view!!.findViewById(R.id.scrollScanContent)
-        val sendButton : Button = view!!.findViewById(R.id.validationSendButton)
+
+        val sendButton : Button = loadingButtonSend.getButton()
         val saveButton : Button = view!!.findViewById(R.id.validationSaveButton)
         imageView.visibility = View.GONE
+        sendButton.visibility = View.INVISIBLE
         sendButton.visibility = View.GONE
         saveButton.visibility = View.VISIBLE
         title.text = "Processed Transaction"
