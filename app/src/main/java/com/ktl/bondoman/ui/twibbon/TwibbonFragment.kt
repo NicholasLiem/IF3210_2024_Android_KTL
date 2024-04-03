@@ -1,6 +1,7 @@
 package com.ktl.bondoman.ui.twibbon
 
 import android.Manifest
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -41,6 +42,7 @@ class TwibbonFragment : Fragment() {
     private lateinit var viewBinding: FragmentTwibbonBinding
     private var imageCapture : ImageCapture? = null
     private var currentTwibbon : String = "twibbon1"
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

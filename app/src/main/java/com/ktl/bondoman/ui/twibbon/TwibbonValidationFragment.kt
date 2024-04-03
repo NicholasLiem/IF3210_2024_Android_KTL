@@ -1,5 +1,7 @@
 package com.ktl.bondoman.ui.twibbon
 
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +23,7 @@ class TwibbonValidationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseArguments()
+
     }
 
     override fun onCreateView(
@@ -31,6 +34,7 @@ class TwibbonValidationFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_twibbon_validation, container, false)
         val cancelButton: Button = view.findViewById(R.id.retakeButton)
         cancelButton.setOnClickListener {
+            activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR)
             activity?.supportFragmentManager?.popBackStackImmediate()
         }
 
