@@ -4,12 +4,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whitePrimary"
-    tools:context=".ui.graph.GraphFragment">
+    tools:context=".ui.graph.GraphFragment"
+    android:layout_gravity="center">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Graph Fragment" />
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart"
+            android:layout_width="450dp"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp">
+
+        </com.github.mikephil.charting.charts.BarChart>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChart"
+            android:layout_width="450dp"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp">
+
+        </com.github.mikephil.charting.charts.PieChart>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/personalChart"
+            android:layout_width="450dp"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp">
+
+        </com.github.mikephil.charting.charts.PieChart>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/personalChartButton"
+                android:layout_width="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_height="wrap_content"
+                android:text="Personal" />
+
+            <Button
+                android:id="@+id/barChartButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="Bar" />
+
+            <Button
+                android:id="@+id/pieChartButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="Pie" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
 
 </FrameLayout>
