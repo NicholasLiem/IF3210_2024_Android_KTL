@@ -14,6 +14,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -22,6 +25,7 @@ import com.github.mikephil.charting.utils.MPPointF
 import com.ktl.bondoman.R
 import com.ktl.bondoman.TransactionApplication
 import com.ktl.bondoman.db.Transaction
+import com.ktl.bondoman.token.TokenManager
 import com.ktl.bondoman.ui.scan.Item
 import com.ktl.bondoman.ui.transaction.TransactionViewModelFactory
 import kotlinx.coroutines.coroutineScope
@@ -31,10 +35,17 @@ import kotlinx.coroutines.launch
 
 
 class GraphFragment : Fragment() {
-    private val arrTransaction = mutableListOf<Transaction>()
-//    private val graphViewModel: GraphViewModel by viewModels {
-//        TransactionViewModelFactory((requireActivity().application as TransactionApplication).repository)
-//    }
+    private var totalExpense: Double = 0.0
+    private var totalIncome: Double = 0.0
+    private var totalPersonalExpense: Double = 0.0
+    private var totalPersonalIncome: Double = 0.0
+    private var maxVal: Double = 0.0
+    private var minVal: Double = 0.0
+    private var q1Count: Int = 0
+    private var q2Count: Int = 0
+    private var q3Count: Int = 0
+    private var q4Count: Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,26 +82,101 @@ class GraphFragment : Fragment() {
             openPieDiagram()
         }
 
+        val transactionDao = (requireActivity().application as TransactionApplication).database.transactionDao()
+        val tokenManager = TokenManager(requireContext())
+        val nim = tokenManager.loadToken()?.nim
 
-        val transactions : ArrayList<PieEntry> = ArrayList()
-        transactions.add(PieEntry(512f,"Income"))
-        transactions.add(PieEntry(342f,"Expense"))
+        lifecycleScope.launch {
+            val transactionsArray = transactionDao.getAllList()
+            for (transaction in transactionsArray){
+                if (transaction.amount > maxVal){
+                    maxVal = transaction.amount
+                }
+                if (transaction.category.equals("Expense") ){
+                    if (transaction.nim == nim){
+                        totalPersonalExpense += transaction.amount
+                    }
+                    totalExpense += transaction.amount
+                } else {
+                    if (transaction.nim == nim){
+                        totalPersonalIncome += transaction.amount
+                    }
+                    totalIncome += transaction.amount
+                }
+            }
 
-        val dataSet = PieDataSet(transactions, "Transactions Data")
+            val q1 = maxVal/4
+            val q2 = maxVal/2
+            val q3 = q1+q2
 
-        dataSet.setDrawIcons(false)
-        dataSet.sliceSpace = 3f
-        dataSet.iconsOffset = MPPointF(0F, 40F)
-        dataSet.selectionShift = 5f
-        dataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+            for (transaction in transactionsArray){
+                if (transaction.amount > q3){
+                    q4Count +=1
+                } else if (transaction.amount > q2){
+                    q3Count +=1
+                } else if (transaction.amount > q1){
+                    q2Count +=1
+                } else {
+                    q1Count +=1
+                }
+            }
 
-        val data = PieData(dataSet)
-        data.setValueTextSize(20f)
-        data.setValueTextColor(Color.WHITE)
-        personalDiagram.data = data
-        personalDiagram.highlightValues(null)
-        personalDiagram.invalidate()
-        personalDiagram.animateXY(750,750)
+            // Personal Data
+            val transactionsPersonal : ArrayList<PieEntry> = ArrayList()
+            transactionsPersonal.add(PieEntry(totalPersonalExpense.toFloat(),"Income"))
+            transactionsPersonal.add(PieEntry(totalPersonalIncome.toFloat(),"Expense"))
+            val personalDataSet = PieDataSet(transactionsPersonal, "Sum Transactions Data Based on Category")
+            personalDataSet.setDrawIcons(false)
+            personalDataSet.sliceSpace = 3f
+            personalDataSet.iconsOffset = MPPointF(0F, 40F)
+            personalDataSet.selectionShift = 5f
+            personalDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+            val personalData = PieData(personalDataSet)
+            personalDataSet.setValueTextSize(20f)
+            personalDataSet.setValueTextColor(Color.WHITE)
+            personalDiagram.data = personalData
+            personalDiagram.highlightValues(null)
+            personalDiagram.invalidate()
+            personalDiagram.animateXY(750,750)
+
+            // Bar Data
+            val transactionsBar : ArrayList<BarEntry> = ArrayList()
+            transactionsBar.add(BarEntry(1f,q1Count.toFloat()))
+            transactionsBar.add(BarEntry(2f,q2Count.toFloat()))
+            transactionsBar.add(BarEntry(3f ,q3Count.toFloat()))
+            transactionsBar.add(BarEntry(4f ,q4Count.toFloat()))
+            val barDataSet = BarDataSet(transactionsBar, "Count Transactions Data Based on each Quarter")
+//            barDataSet.setDrawIcons(false)
+            barDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+            val barData = BarData(barDataSet)
+            barData.setBarWidth(0.9f);
+            barDataSet.setValueTextSize(20f)
+            barDataSet.setValueTextColor(Color.BLACK)
+            barDiagram.setFitBars(true)
+            barDiagram.data = barData
+            barDiagram.highlightValues(null)
+            barDiagram.invalidate()
+            barDiagram.animateY(750)
+
+            // Pie Data
+            val transactionsPie : ArrayList<PieEntry> = ArrayList()
+            transactionsPie.add(PieEntry(totalExpense.toFloat(),"Income"))
+            transactionsPie.add(PieEntry(totalIncome.toFloat(),"Expense"))
+            val pieDataSet = PieDataSet(transactionsPie, "Sum Transactions Data Based on Category")
+            pieDataSet.setDrawIcons(false)
+            pieDataSet.sliceSpace = 3f
+            pieDataSet.iconsOffset = MPPointF(0F, 40F)
+            pieDataSet.selectionShift = 5f
+            pieDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+            val pieData = PieData(pieDataSet)
+            pieDataSet.setValueTextSize(20f)
+            pieDataSet.setValueTextColor(Color.WHITE)
+            pieDiagram.data = pieData
+            pieDiagram.highlightValues(null)
+            pieDiagram.invalidate()
+            pieDiagram.animateXY(750,750)
+
+        }
 
 
         return view
