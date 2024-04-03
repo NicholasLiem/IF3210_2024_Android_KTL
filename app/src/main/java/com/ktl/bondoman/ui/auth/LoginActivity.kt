@@ -44,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
 
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         receiver = NetworkReceiver.getInstance()
+        receiver.setShow(false)
         this.registerReceiver(receiver, filter)
     }
 
