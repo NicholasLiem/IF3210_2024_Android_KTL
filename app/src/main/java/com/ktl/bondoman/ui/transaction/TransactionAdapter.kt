@@ -1,7 +1,6 @@
 package com.ktl.bondoman.ui.transaction
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ktl.bondoman.R
 import com.ktl.bondoman.db.Transaction
-import com.ktl.bondoman.token.TokenManager
 
 class TransactionAdapter (private val nim : String) : ListAdapter<Transaction, TransactionViewHolder>(TransactionsComparator()) {
 
@@ -63,11 +61,12 @@ class TransactionViewHolder(itemView: View, private val nim: String) : RecyclerV
         amountView.text = "Amount: \n$ " + "%,.3f".format(current.amount)
         locationView.text = "Location: \n" + current.location
         categoryView.text =  current.category
-        if (current.category == "Income"){
-            categoryView.setTextColor(Color.parseColor("#B54B88F1"))
-        } else {
-            categoryView.setTextColor(Color.parseColor("#DCED4E4E"))
-        }
+//        Accessibility reasons
+//        if (current.category == "Income"){
+//            categoryView.setTextColor(Color.parseColor("#B54B88F1"))
+//        } else {
+//            categoryView.setTextColor(Color.parseColor("#DCED4E4E"))
+//        }
         nimView.text = "by " + current.nim
 
         if (nim != current.nim){

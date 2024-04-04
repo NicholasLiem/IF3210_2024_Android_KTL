@@ -1,7 +1,6 @@
 package com.ktl.bondoman.ui.twibbon
 
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater

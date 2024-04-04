@@ -185,7 +185,7 @@ class GraphFragment : Fragment() {
         return view
     }
 
-    fun openPersonalDiagram(){
+    private fun openPersonalDiagram(){
         val personalDiagram : PieChart = view!!.findViewById(R.id.personalChart)
         val barDiagram : BarChart = view!!.findViewById(R.id.barChart)
         val pieDiagram : PieChart = view!!.findViewById(R.id.pieChart)
@@ -194,7 +194,7 @@ class GraphFragment : Fragment() {
         pieDiagram.visibility = View.GONE
     }
 
-    fun openBarDiagram(){
+    private fun openBarDiagram(){
         val personalDiagram : PieChart = view!!.findViewById(R.id.personalChart)
         val barDiagram : BarChart = view!!.findViewById(R.id.barChart)
         val pieDiagram : PieChart = view!!.findViewById(R.id.pieChart)
@@ -203,7 +203,7 @@ class GraphFragment : Fragment() {
         pieDiagram.visibility = View.GONE
     }
 
-    fun openPieDiagram(){
+    private fun openPieDiagram(){
         val personalDiagram : PieChart = view!!.findViewById(R.id.personalChart)
         val barDiagram : BarChart = view!!.findViewById(R.id.barChart)
         val pieDiagram : PieChart = view!!.findViewById(R.id.pieChart)
@@ -217,13 +217,5 @@ class GraphFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.title = "Graph"
-
-//        graphViewModel.allTransactions.observe(this) { transactions ->
-//            transactions.let {
-//                for (transaction in it){
-//                    arrTransaction.add(transaction)
-//                }
-//            }
-//        }
     }
 }

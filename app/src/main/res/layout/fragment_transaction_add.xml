@@ -48,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Title"
+            android:textColorHint="#333333"
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -56,7 +57,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <RadioGroup
@@ -86,6 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Amount"
+            android:textColorHint="#333333"
             style="@style/transaction_add_style">
 
             <com.google.android.material.textfield.TextInputEditText

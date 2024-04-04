@@ -53,7 +53,4 @@
         android:label="fragment_twibbon_validation"
         tools:layout="@layout/fragment_twibbon_validation" />
 
-
-
-
 </navigation>

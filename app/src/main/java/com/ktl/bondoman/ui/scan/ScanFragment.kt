@@ -38,8 +38,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.nio.ByteBuffer
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 private const val TAG = "cameraX"
 private const val REQUEST_CODE = 123
