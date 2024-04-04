@@ -102,6 +102,8 @@ Biasanya kerentanan ini dapat dieskploit dengan adanya akses kontrol yang tidak 
 
 Analisis dan Perbaikan
 
+Dalam hal ini beberapa hal yang telah kami lakukan untuk menjaga data dari pengguna adalah dengan menggunakan EncryptedSharedPreferences di mana token dan data yang diekstrak dari JWT disimpan. EncryptedSharedPreferences menggunakan enkripsi AES 256 bit yang dinilai cukup kuat untuk mengengkripsi data-data tersebut. Untuk metode penyimpanan menggunakan SQL Lite ada beberapa alternatif yang dapat digunakan untuk menjaga data di dalamnya, yakni melakukan enkripsi pada persistence tersebut atau menggunakan alternatif lain yakni online storage. Selain itu, melakukan enkripsi kepada storage SQL Lite dapat dipertimbangkan tetapi akan menambah overhead pada sistem karena setiap pembacaan data harus dilakukan proses enkripsi dan dekripsi sehingga masih harus dipertimbangkan untuk mendapatkan keamanan data dan overhead yang timbul jika menggunakan opsi ini.
+
 ## 📱 Accesibility Testing
 ...
 
