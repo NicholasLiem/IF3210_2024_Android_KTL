@@ -206,7 +206,7 @@ class TransactionAddFragment : Fragment() {
         }
 
         if (location.isNotEmpty() && !location.matches(Regex("^[a-zA-Z0-9+\-,:.\s]+$"))) {
-            Toast.makeText(requireContext(), "Invalid location. It can only include ':' or '.'", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Invalid location, please use the format given., Toast.LENGTH_SHORT).show()
             return false
         }
 
