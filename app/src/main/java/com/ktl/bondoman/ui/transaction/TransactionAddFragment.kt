@@ -111,7 +111,7 @@ class TransactionAddFragment : Fragment() {
                 R.id.radioButtonExpense -> "Expense"
                 else -> "" // Handle default case
             }
-            if (validateForm(title, amount, category)) {
+            if (validateForm(title, amount, category, location)) {
                 // Sets default value for location if not provided
                 if (location.isEmpty()) {
                     location = "Lat: -6.8733093, Lon: 107.6050709"
@@ -186,9 +186,9 @@ class TransactionAddFragment : Fragment() {
         }
     }
 
-    private fun validateForm(title: String, amount: Double, category: String): Boolean {
-        if (title.isEmpty()) {
-            Toast.makeText(requireContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show()
+    private fun validateForm(title: String, amount: Double, category: String, location: String): Boolean {
+        if (title.isEmpty() || !title.matches(Regex("^[a-zA-Z\\s]+$"))) {
+            Toast.makeText(requireContext(), "Invalid title. Please use only letters and spaces.", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -202,8 +202,14 @@ class TransactionAddFragment : Fragment() {
             return false
         }
 
+        if (location.isNotEmpty() && !location.matches(Regex("^[^:.*]*[:.]?[^:.*]*$"))) {
+            Toast.makeText(requireContext(), "Invalid location. It can only include ':' or '.'", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
         return true
     }
+
 
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

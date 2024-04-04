@@ -79,20 +79,29 @@ The BondoMan app is an Android application for financial tracking, made using ko
 Ada tiga kerentanan yang akan dianalisis yakni M4, M8, dan M9 (2024). Masing-masing kerentanan tersebut adalah M4: Insufficient Input/Output Validation, M8: Security Misconfig, dan M9: Insecure Data Storage
 
 1. M4: Insufficient Input/Output Validation
+
 Biasanya hal ini terjadi karena validasi dan sanitasi data dari pengguna yang tidak tepat sehingga dapat menimbulkan serangan seperti SQL Injection, Command Injection ataupun Cross-Site Scripting (XSS) attack.
 
 Analisis dan Perbaikan
 
+Pada aplikasi kami sebelumnya hanya melakukan validasi untuk tipe datanya saja misalnya amount harus lebih dari nol atau semacamnya, tetapi untuk menghindari SQL Injection dan semacamnya kami melakukan validasi tambahan, yakni menggunakan regex di mana title hanya boleh dalam bentuk karakter dan location boleh karakter tetapi selain alfabet dan "." dan ":" tidak diperbolehkan. Berikut adalah perbedaannya setelah diperbaiki.
+
+![img/img_13.png](img/img_13.png)
+
+
 2. M8: Security Misconfiguration
+
 Beberapa eksploit yang biasa digunakan untuk masalah M8 adalah sebagai berikut:
 * Unnecessary permissions enabled
 * Weak encryption or hashing
 * Lack of secure communication
-* Unprotected storage
 * Insecure file permissions
 * Improper session management
 
 Analisis dan Perbaikan
+
+Berikut adalah daftar permission yang digunakan pada aplikasi kami: Internet, Camera, Write External Storage, Manage External Storage, Read External Storage, Access Network State, Access WIFI State, Access Fine Location, Access Coarse Location, Access Background Location. Menurut kami apa yang kami gunakan sebagai permission untuk aplikasi ini sudah sesuai sehingga tidak ada unnecessary permission yang kami gunakan. Untuk enkripsi yang kami gunakan terdapat pada EncryptedSharedPreferences di mana kami menyimpan token dan data-data dari JWT claimnya di dalam wadah tersebut di mana wadah tersebut dienkripsi menggunakan algoritma AES 256. Untuk secure communication, semua perantaraan antara aplikasi dan backend menggunakan HTTPS (dari servernya) jadi pesan yang dikirimkan ke server sudah secure pada layer TLS. Selain itu, untuk session management yang kami gunakan sudah cukup baik di mana kami akan melakukan check setiap 2 menit untuk token yang disimpan pada aplikasi jika sudah expired maka akan dilogout secara otomatis serta jika akan melakukan request ke server menggunakan token yang expired maka tidak akan ada hal yang terjadi karena response ditolak.
+
 
 3. M9: Insecure Data Storage
 Biasanya kerentanan ini dapat dieskploit dengan adanya akses kontrol yang tidak baik sehingga orang lain atau agen dapat mengakses informasi sensitif. Eksploit yang digunakan adalah:
