@@ -1,5 +1,6 @@
 package com.ktl.bondoman.ui.graph
 
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -57,6 +58,8 @@ class GraphFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_graph, container, false)
+        activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR)
+
 
         val personalDiagram : PieChart = view.findViewById(R.id.personalChart)
         val barDiagram : BarChart = view.findViewById(R.id.barChart)
@@ -125,7 +128,7 @@ class GraphFragment : Fragment() {
             val transactionsPersonal : ArrayList<PieEntry> = ArrayList()
             transactionsPersonal.add(PieEntry(totalPersonalExpense.toFloat(),"Income"))
             transactionsPersonal.add(PieEntry(totalPersonalIncome.toFloat(),"Expense"))
-            val personalDataSet = PieDataSet(transactionsPersonal, "Sum Transactions Data Based on Category")
+            val personalDataSet = PieDataSet(transactionsPersonal, "Sum Transactions Price Based on Category")
             personalDataSet.setDrawIcons(false)
             personalDataSet.sliceSpace = 3f
             personalDataSet.iconsOffset = MPPointF(0F, 40F)
@@ -145,7 +148,7 @@ class GraphFragment : Fragment() {
             transactionsBar.add(BarEntry(2f,q2Count.toFloat()))
             transactionsBar.add(BarEntry(3f ,q3Count.toFloat()))
             transactionsBar.add(BarEntry(4f ,q4Count.toFloat()))
-            val barDataSet = BarDataSet(transactionsBar, "Count Transactions Data Based on each Quarter")
+            val barDataSet = BarDataSet(transactionsBar, "Count Transactions Price Grouping Based on each Quarter")
 //            barDataSet.setDrawIcons(false)
             barDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
             val barData = BarData(barDataSet)
@@ -162,7 +165,7 @@ class GraphFragment : Fragment() {
             val transactionsPie : ArrayList<PieEntry> = ArrayList()
             transactionsPie.add(PieEntry(totalExpense.toFloat(),"Income"))
             transactionsPie.add(PieEntry(totalIncome.toFloat(),"Expense"))
-            val pieDataSet = PieDataSet(transactionsPie, "Sum Transactions Data Based on Category")
+            val pieDataSet = PieDataSet(transactionsPie, "Sum Transactions Price Based on Category")
             pieDataSet.setDrawIcons(false)
             pieDataSet.sliceSpace = 3f
             pieDataSet.iconsOffset = MPPointF(0F, 40F)

@@ -56,6 +56,8 @@ class TwibbonFragment : Fragment() {
             startCamera()
         }
 
+        activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
         return viewBinding.root
     }
 
@@ -200,11 +202,13 @@ class TwibbonFragment : Fragment() {
                         tempFile
                     )
 
+
                     val validationFrag = TwibbonValidationFragment.newInstance(currentTwibbon, savedUri.toString())
                     activity?.supportFragmentManager?.beginTransaction()
                         ?.replace(R.id.nav_host_fragment, validationFrag)
                         ?.addToBackStack(null)
                         ?.commit()
+
                 }
 
             }

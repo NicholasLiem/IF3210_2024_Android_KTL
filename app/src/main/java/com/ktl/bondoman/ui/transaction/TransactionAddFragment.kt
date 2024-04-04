@@ -1,6 +1,7 @@
 package com.ktl.bondoman.ui.transaction
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -51,6 +52,8 @@ class TransactionAddFragment : Fragment() {
         nim = tokenManager.loadToken()?.nim
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         parseArguments()
+        activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
     }
 
 

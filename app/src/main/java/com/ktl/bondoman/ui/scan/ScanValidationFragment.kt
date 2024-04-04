@@ -1,6 +1,7 @@
 package com.ktl.bondoman.ui.scan
 
 import android.content.IntentFilter
+import android.content.pm.ActivityInfo
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
@@ -63,6 +64,9 @@ class ScanValidationFragment : Fragment() {
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         receiver = NetworkReceiver.getInstance()
         requireActivity().registerReceiver(receiver, filter)
+
+        activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
     }
 
     override fun onCreateView(
