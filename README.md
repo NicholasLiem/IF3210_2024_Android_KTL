@@ -114,7 +114,16 @@ Analisis dan Perbaikan
 Dalam hal ini beberapa hal yang telah kami lakukan untuk menjaga data dari pengguna adalah dengan menggunakan EncryptedSharedPreferences di mana token dan data yang diekstrak dari JWT disimpan. EncryptedSharedPreferences menggunakan enkripsi AES 256 bit yang dinilai cukup kuat untuk mengengkripsi data-data tersebut. Untuk metode penyimpanan menggunakan SQL Lite ada beberapa alternatif yang dapat digunakan untuk menjaga data di dalamnya, yakni melakukan enkripsi pada persistence tersebut atau menggunakan alternatif lain yakni online storage. Selain itu, melakukan enkripsi kepada storage SQL Lite dapat dipertimbangkan tetapi akan menambah overhead pada sistem karena setiap pembacaan data harus dilakukan proses enkripsi dan dekripsi sehingga masih harus dipertimbangkan untuk mendapatkan keamanan data dan overhead yang timbul jika menggunakan opsi ini.
 
 ## 📱 Accesibility Testing
-...
+Bukti perubahan setelah dilakukan accessibility testing
+![img/img_14.png](img/img_14.png)
+
+Sebelum dilakukan accessibility testing
+![img/img_15.png](img/img_15.png)
+
+Setelah dilakukan accessibility testing
+![img/img_16.png](img/img_16.png)
+
+Disclaimer: Ada beberapa suggestions yang tidak dapat diubah karena berhubungan dengan faktor eksternal misalnya pada saat pengambilan gambar di graf serta ada masalah dengan TextScaling untuk ActionBar/Toolbar/Navbar yang tidak dapat diperbaiki
 
 ## 🖥️ **Workload Distribution and Contributors**
 | Name                     | Student ID | Functionality | Work Duration |
